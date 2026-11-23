@@ -1,0 +1,373 @@
+/* =========================================
+   BACK BUTTON
+========================================= */
+.back-nav {
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #dce3ec;
+    color: #526174;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #f4f6fa;
+    color: #102747;
+    border-color: #102747;
+}
+
+/* =========================================
+   HEADER CARD (Light Blue Top Section)
+========================================= */
+.group-header-card {
+    background: #f0f7ff;
+    border: 1px solid #d3e3f5;
+    border-radius: 12px;
+    padding: 24px 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(16, 41, 75, 0.02);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.group-icon-large {
+    width: 65px;
+    height: 65px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.group-icon-large svg { width: 32px; height: 32px; }
+
+.group-title-info .group-id {
+    font-size: 12px;
+    color: #1e4e8c;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.group-title-info h1 {
+    font-size: 24px;
+    color: #102747;
+    margin-bottom: 5px;
+}
+
+.group-title-info p {
+    font-size: 13px;
+    color: #526174;
+}
+
+.header-divider {
+    width: 1px;
+    height: 70px;
+    background: #d3e3f5;
+}
+
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #1e4e8c;
+    font-weight: 600;
+}
+
+/* Mini Donut in Header */
+.mini-donut-wrapper { display: flex; align-items: center; }
+.mini-donut {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mini-donut-inner {
+    width: 40px;
+    height: 40px;
+    background: #f0f7ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #102747;
+}
+
+.students-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #102747;
+    font-size: 18px;
+}
+
+/* =========================================
+   MIDDLE GRID (Info & Members)
+========================================= */
+.middle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.content-card {
+    background: #ffffff;
+    border: 1px solid #e9edf3;
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: 0 2px 8px rgba(16, 41, 75, 0.03);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.card-header .title { display: flex; align-items: center; gap: 10px; }
+.card-header .title h3 { color: #102747; font-size: 15px; }
+
+/* Info Content */
+.info-row {
+    display: flex;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.info-row .label {
+    width: 110px;
+    font-weight: 600;
+    color: #102747;
+    flex-shrink: 0;
+}
+
+.info-row .value { color: #526174; }
+
+.value-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #526174;
+}
+.value-list li { margin-bottom: 4px; }
+
+.tech-row { align-items: flex-start; margin-bottom: 0; }
+.tech-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tech-tags .tag {
+    background: #e6f0fa;
+    color: #1e73be;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Members Table Specifics */
+.members-card {
+    padding: 0; /* Remove padding to allow header to stretch */
+    overflow: hidden;
+}
+
+.navy-header {
+    background: #102747;
+    padding: 15px 22px;
+    margin-bottom: 0;
+}
+
+.members-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.members-table th {
+    background: #f8fafc;
+    color: #8794a5;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    border-bottom: 1px solid #e9edf3;
+}
+
+.members-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #e9edf3;
+    font-size: 12px;
+    color: #526174;
+}
+
+.members-table tr:last-child td { border-bottom: none; }
+.members-table td strong { color: #102747; }
+
+.role-tag {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+}
+.role-tag.leader { background: #fdf5e6; color: #d48c2d; }
+.role-tag.member { background: #e6f0fa; color: #1e73be; }
+
+/* =========================================
+   BOTTOM GRID (Progress, Milestones, Sup)
+========================================= */
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+}
+
+/* Project Progress */
+.progress-content {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.donut-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-inner {
+    width: 64px;
+    height: 64px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #102747;
+}
+
+.progress-details { flex: 1; }
+
+.stage-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.stage-row .label { font-size: 12px; font-weight: 600; color: #102747; }
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.status-badge.development { background: #e6f0fa; color: #1e73be; }
+
+.progress-bar-wrapper {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.progress-fill { height: 100%; background: #1e4e8c; border-radius: 10px; }
+
+.last-updated {
+    font-size: 11px;
+    color: #8794a5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Milestones Table */
+.milestone-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.milestone-table th {
+    color: #8794a5;
+    text-align: left;
+    padding-bottom: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-bottom: 1px solid #e9edf3;
+}
+
+.milestone-table td {
+    padding: 14px 0;
+    font-size: 12px;
+    color: #526174;
+    border-bottom: 1px solid #e9edf3;
+}
+.milestone-table tr:last-child td { border-bottom: none; padding-bottom: 0; }
+
+.ms-status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    display: inline-block;
+}
+.ms-status.completed { background: #eaf5ee; color: #2e8b57; }
+.ms-status.pending { background: #fdf5e6; color: #d48c2d; }
+.ms-status.upcoming { background: #f4f6fa; color: #526174; }
+
+/* Supervisor Info */
+.supervisor-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.sup-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.sup-info h4 { font-size: 16px; color: #102747; margin-bottom: 4px; }
+.sup-info p { font-size: 12px; color: #526174; margin-bottom: 12px; }
+
+.sup-contact { display: flex; flex-direction: column; gap: 6px; }
+.sup-contact span { font-size: 11px; color: #526174; display: flex; align-items: center; gap: 6px; }

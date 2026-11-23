@@ -1,0 +1,683 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Reviews | Riphah FYP</title>
+
+    <link rel="stylesheet" href="{% static 'supervisors/css/supervisor-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'supervisors/css/document-reviews.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+
+            <div class="brand-text">
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT<br>SYSTEM</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'supervisor_dashboard' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="{% url 'assigned_groups' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                My Assigned Groups
+            </a>
+
+            <a href="{% url 'proposal_reviews' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                Proposal Reviews
+            </a>
+
+            <a href="{% url 'student_progress' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 20V10M12 20V4M6 20v-6"/>
+                </svg>
+                Student Progress
+            </a>
+
+            <a href="{% url 'document_reviews' %}" class="menu-item active">
+                <svg viewBox="0 0 24 24">
+                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                    <polyline points="13 2 13 9 20 9"/>
+                </svg>
+                Document Reviews
+            </a>
+
+            <a href="{% url 'feedback' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                Feedback & Comments
+            </a>
+
+            <a href="{% url 'meetings' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Meetings
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="/" class="menu-item logout">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="menu-toggle" type="button">
+                    <svg viewBox="0 0 24 24" width="24" height="24"
+                         stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+
+                <div class="page-title">
+                    <h2>Document Reviews</h2>
+                    <p>View and review student documents</p>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="notification-wrapper">
+                    <button class="notification-button" type="button">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                            <path d="M10 21h4"/>
+                        </svg>
+
+                        {% if unread_notifications_count %}
+                            <span class="notification-badge">
+                                {{ unread_notifications_count }}
+                            </span>
+                        {% endif %}
+                    </button>
+                </div>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        {{ supervisor.first_name|first|upper }}
+                    </div>
+
+                    <div class="profile-info">
+                        <h4>
+                            {{ supervisor.get_full_name|default:supervisor.email }}
+                        </h4>
+                        <p>Supervisor</p>
+
+                        <svg width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE BODY -->
+        <section class="dashboard-body">
+
+
+            <!-- DJANGO MESSAGES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message-alert {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- SUMMARY CARDS -->
+            <div class="doc-reviews-summary-grid">
+
+                <div class="summary-card">
+                    <div class="icon-box blue">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ total_documents }}</h2>
+                        <p>Total Documents</p>
+                        <span>Across your assigned groups</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box green">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ reviewed_documents_count }}</h2>
+                        <p>Reviewed</p>
+                        <span>Documents</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box orange">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ pending_documents_count }}</h2>
+                        <p>Pending Review</p>
+                        <span>Documents</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box purple">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ groups_with_documents_count }}</h2>
+                        <p>Groups</p>
+                        <span>With submitted documents</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH AND FILTER -->
+            <form method="GET" action="{% url 'document_reviews' %}"
+                  class="filter-bar">
+
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none"
+                         stroke="#8794a5" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search by group name or document title..."
+                        value="{{ search_query }}"
+                    >
+                </div>
+
+
+                <div class="filter-group">
+                    <label for="status-filter">Filter by Status:</label>
+
+                    <select name="status" id="status-filter">
+                        <option value="">All Statuses</option>
+
+                        <option value="pending"
+                            {% if selected_status == 'pending' %}selected{% endif %}>
+                            Pending
+                        </option>
+
+                        <option value="under_review"
+                            {% if selected_status == 'under_review' %}selected{% endif %}>
+                            Under Review
+                        </option>
+
+                        <option value="approved"
+                            {% if selected_status == 'approved' %}selected{% endif %}>
+                            Approved
+                        </option>
+
+                        <option value="revision_required"
+                            {% if selected_status == 'revision_required' %}selected{% endif %}>
+                            Revision Required
+                        </option>
+
+                        <option value="rejected"
+                            {% if selected_status == 'rejected' %}selected{% endif %}>
+                            Rejected
+                        </option>
+                    </select>
+                </div>
+
+
+                <button type="submit" class="btn-primary">
+                    Apply Filter
+                </button>
+
+                <a href="{% url 'document_reviews' %}" class="btn-outline">
+                    Reset
+                </a>
+
+            </form>
+
+
+            <!-- DOCUMENTS TABLE -->
+            <div class="content-card table-card">
+
+                <table class="groups-table">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Group Name</th>
+                            <th>Document Type</th>
+                            <th>Submitted By</th>
+                            <th>Submitted On</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for document in documents %}
+
+                            <tr>
+
+                                <td>{{ forloop.counter }}</td>
+
+                                <td>
+                                    <strong>
+                                        {{ document.project_group.group_name }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ document.get_document_type_display }}
+                                </td>
+
+                                <td>
+                                    {{ document.submitted_by.user.get_full_name|default:document.submitted_by.user.email }}
+                                </td>
+
+                                <td>
+                                    {% if document.submitted_at %}
+                                        {{ document.submitted_at|date:"d M Y, h:i A" }}
+                                    {% else %}
+                                        Not available
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if document.status == 'approved' %}
+                                        <span class="status-badge approved">
+                                            Approved
+                                        </span>
+
+                                    {% elif document.status == 'under_review' %}
+                                        <span class="status-badge under-review">
+                                            Under Review
+                                        </span>
+
+                                    {% elif document.status == 'revision_required' %}
+                                        <span class="status-badge changes">
+                                            Revision Required
+                                        </span>
+
+                                    {% elif document.status == 'rejected' %}
+                                        <span class="status-badge changes">
+                                            Rejected
+                                        </span>
+
+                                    {% else %}
+                                        <span class="status-badge under-review">
+                                            Pending
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="action-buttons-group">
+
+                                        <a
+                                            href="{% url 'document_reviews' %}?document_id={{ document.id }}"
+                                            class="btn-action-icon"
+                                        >
+                                            View
+                                        </a>
+
+                                        {% if document.document_file %}
+                                            <a
+                                                href="{{ document.document_file.url }}"
+                                                class="btn-action-icon"
+                                                target="_blank"
+                                                rel="noopener"
+                                            >
+                                                Download
+                                            </a>
+                                        {% endif %}
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:30px;">
+                                    No documents have been submitted by your assigned groups yet.
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- DOCUMENT PREVIEW AND REVIEW -->
+            <div class="bottom-section">
+
+
+                <!-- DOCUMENT PREVIEW -->
+                <div class="preview-card">
+
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="#a17c2f" stroke-width="2"
+                             width="18" height="18">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+
+                        <h3>Document Preview</h3>
+                    </div>
+
+
+                    {% if selected_document %}
+
+                        <div class="preview-box">
+
+                            <div class="doc-icon">
+                                <span>FILE</span>
+
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2"
+                                     width="30" height="30">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                            </div>
+
+
+                            <div class="doc-info">
+
+                                <h4>
+                                    {{ selected_document.get_document_type_display }}
+                                </h4>
+
+                                <p>
+                                    Group:
+                                    {{ selected_document.project_group.group_name }}
+                                </p>
+
+                                <p>
+                                    Submitted by:
+                                    {{ selected_document.submitted_by.user.get_full_name|default:selected_document.submitted_by.user.email }}
+                                </p>
+
+                                {% if selected_document.description %}
+                                    <p>
+                                        {{ selected_document.description }}
+                                    </p>
+                                {% endif %}
+
+
+                                <div class="doc-actions">
+
+                                    {% if selected_document.document_file %}
+
+                                        <a
+                                            href="{{ selected_document.document_file.url }}"
+                                            class="btn-download"
+                                            download
+                                        >
+                                            Download
+                                        </a>
+
+                                        <a
+                                            href="{{ selected_document.document_file.url }}"
+                                            class="btn-open"
+                                            target="_blank"
+                                            rel="noopener"
+                                        >
+                                            Open in New Tab
+                                        </a>
+
+                                    {% else %}
+
+                                        <p>Document file is not available.</p>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="preview-box">
+                            <div class="doc-info">
+                                <h4>No Document Selected</h4>
+                                <p>
+                                    Select a document from the table above
+                                    to view its details.
+                                </p>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- REVIEW FORM -->
+                <div class="review-card">
+
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="#a17c2f" stroke-width="2"
+                             width="18" height="18">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+
+                        <h3>Add Review / Comments</h3>
+                    </div>
+
+
+                    {% if selected_document %}
+
+                        <form method="POST"
+                              action="{% url 'document_reviews' %}?document_id={{ selected_document.id }}"
+                              class="review-form-content">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="document_id"
+                                value="{{ selected_document.id }}"
+                            >
+
+
+                            <div class="form-group inline-group">
+
+                                <span class="label">Review Status:</span>
+
+                                <div class="radio-options">
+
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="recommendation"
+                                            value="approve"
+                                            {% if selected_document.status == 'approved' %}checked{% endif %}
+                                            required
+                                        >
+                                        Approve
+                                    </label>
+
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="recommendation"
+                                            value="revision"
+                                            {% if selected_document.status == 'revision_required' %}checked{% endif %}
+                                        >
+                                        Request Changes
+                                    </label>
+
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="recommendation"
+                                            value="reject"
+                                            {% if selected_document.status == 'rejected' %}checked{% endif %}
+                                        >
+                                        Reject
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="label" for="review-comments">
+                                    Comments:
+                                </label>
+
+                                <textarea
+                                    id="review-comments"
+                                    name="comments"
+                                    rows="4"
+                                    placeholder="Write your comments or feedback here..."
+                                    required
+                                >{{ selected_document.feedback }}</textarea>
+
+                            </div>
+
+
+                            <div class="form-actions">
+
+                                <button type="submit" class="btn-primary-dark">
+                                    Submit Review
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    {% else %}
+
+                        <div class="review-form-content">
+                            <p>
+                                Select a submitted document before adding
+                                a review or comments.
+                            </p>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

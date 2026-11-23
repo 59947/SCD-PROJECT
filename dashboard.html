@@ -1,0 +1,1132 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Dashboard | Riphah FYP</title>
+
+    <link rel="stylesheet" href="{% static 'supervisors/css/supervisor-dashboard.css' %}">
+
+    <style>
+        /* Notification and profile dropdowns */
+
+        .notification-wrapper,
+        .profile-wrapper {
+            position: relative;
+        }
+
+        .notification-button {
+            cursor: pointer;
+        }
+
+        .profile {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            font: inherit;
+        }
+
+        .notification-dropdown,
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            background: white;
+            width: 310px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.13);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .notification-dropdown.show,
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-heading {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dropdown-heading h3 {
+            margin: 0;
+            font-size: 15px;
+            color: #10294b;
+        }
+
+        .notification-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notification-item p {
+            margin: 0 0 5px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .notification-item small,
+        .dropdown-user small {
+            color: #777;
+            font-size: 11px;
+        }
+
+        .notification-empty {
+            padding: 20px;
+            color: #777;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .notification-item button {
+            font-family: inherit;
+        }
+
+        .notification-item button:hover p {
+            color: #24558b;
+        }
+
+        .notification-read {
+            background: #ffffff;
+        }
+
+        .notification-unread {
+            background: #f0f5fb;
+        }
+
+        .notification-status {
+            display: inline-block;
+            color: #24558b;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .mark-all-button {
+            border: none;
+            background: transparent;
+            color: #24558b;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 0;
+        }
+
+        .mark-all-button:hover {
+            text-decoration: underline;
+        }
+
+        .notification-heading-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-heading-row form {
+            margin: 0;
+        }
+
+        .dropdown-user {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .dropdown-user strong {
+            color: #10294b;
+        }
+
+        .profile-dropdown button {
+            width: 100%;
+            padding: 13px 15px;
+            border: none;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .profile-dropdown button:hover {
+            background: #f4f6fa;
+            color: #10294b;
+        }
+
+        /* Edit profile modal */
+
+        .profile-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .profile-modal.show {
+            display: flex;
+        }
+
+        .profile-modal-content {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #10294b;
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .modal-header button {
+            border: none;
+            background: none;
+            font-size: 27px;
+            cursor: pointer;
+        }
+
+        .profile-modal-content form {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .profile-modal-content label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-modal-content input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border: 1px solid #d5dbe5;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .modal-actions button {
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #d5dbe5;
+        }
+
+        .modal-actions button[type="submit"] {
+            background: #10294b;
+            color: white;
+            border-color: #10294b;
+        }
+
+        /* Django messages */
+
+        .dashboard-messages {
+            margin-bottom: 18px;
+        }
+
+        .dashboard-message {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .dashboard-message.success {
+            background: #e8f7ed;
+            color: #176b35;
+        }
+
+        .dashboard-message.error {
+            background: #fdecec;
+            color: #a12626;
+        }
+
+        .dashboard-message.warning {
+            background: #fff5df;
+            color: #805500;
+        }
+
+        .dashboard-message.info {
+            background: #eaf2fc;
+            color: #24558b;
+        }
+
+        @media (max-width: 600px) {
+            .notification-dropdown,
+            .profile-dropdown {
+                width: 280px;
+                right: -10px;
+            }
+
+            .profile-modal-content {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     style="color:white;width:28px;height:28px;">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+
+            <div class="brand-text">
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT<br>SYSTEM</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'supervisor_dashboard' %}" class="menu-item active">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="{% url 'assigned_groups' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                My Assigned Groups
+            </a>
+
+            <a href="{% url 'proposal_reviews' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                Proposal Reviews
+            </a>
+
+            <a href="{% url 'student_progress' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 20V10M12 20V4M6 20v-6"/>
+                </svg>
+                Student Progress
+            </a>
+
+            <a href="{% url 'document_reviews' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                    <polyline points="13 2 13 9 20 9"/>
+                </svg>
+                Document Reviews
+            </a>
+
+            <a href="{% url 'feedback' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                Feedback & Comments
+            </a>
+
+            <a href="{% url 'meetings' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Meetings
+            </a>
+
+            <a href="#" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Evaluations
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="/" class="menu-item logout">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="menu-toggle" type="button">
+                    <svg viewBox="0 0 24 24" width="24" height="24"
+                         stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+
+                <div class="page-title">
+                    <h2>Supervisor Dashboard</h2>
+                    <p>Welcome back, {{ supervisor.get_full_name|default:supervisor.email }}</p>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <!-- NOTIFICATION BELL -->
+                <div class="notification-wrapper">
+
+                    <button type="button"
+                            class="notification-button"
+                            id="notificationButton"
+                            aria-label="Notifications"
+                            aria-expanded="false">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                            <path d="M10 21h4"/>
+                        </svg>
+
+                        {% if unread_notifications_count > 0 %}
+                            <span class="notification-dot"></span>
+                        {% endif %}
+
+                    </button>
+
+
+                    <!-- DATABASE NOTIFICATION DROPDOWN -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+
+                        <div class="dropdown-heading">
+
+                            <div class="notification-heading-row">
+                                <h3>Notifications</h3>
+
+                                {% if unread_notifications_count > 0 %}
+                                    <form method="POST"
+                                          action="{% url 'mark_all_supervisor_notifications_read' %}">
+                                        {% csrf_token %}
+
+                                        <button type="submit" class="mark-all-button">
+                                            Mark All as Read
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+
+                            <small style="color:#777;font-size:11px;">
+                                {{ unread_notifications_count }} unread notification(s)
+                            </small>
+
+                        </div>
+
+
+                        {% for notification in supervisor_notifications %}
+
+                            <div class="notification-item {% if notification.is_read %}notification-read{% else %}notification-unread{% endif %}">
+
+                                <form method="POST"
+                                      action="{% url 'mark_supervisor_notification_read' notification.id %}">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            style="width:100%;border:none;background:transparent;text-align:left;cursor:pointer;padding:0;">
+
+                                        <p style="font-weight:{% if not notification.is_read %}700{% else %}400{% endif %};">
+                                            {{ notification.title }}
+                                        </p>
+
+                                        <p>
+                                            {{ notification.message }}
+                                        </p>
+
+                                        <small>
+                                            {{ notification.created_at|timesince }} ago
+                                        </small>
+
+                                        {% if not notification.is_read %}
+                                            <span class="notification-status">
+                                                NEW
+                                            </span>
+                                        {% endif %}
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% empty %}
+
+                            <div class="notification-empty">
+                                No notifications available.
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFILE DROPDOWN -->
+                <div class="profile-wrapper">
+
+                    <button type="button"
+                            class="profile"
+                            id="profileButton"
+                            aria-label="Open profile menu">
+
+                        <div class="profile-avatar"
+                             style="background-image:url('https://ui-avatars.com/api/?name={{ supervisor.first_name|urlencode }}+{{ supervisor.last_name|urlencode }}&background=0D8ABC&color=fff');background-size:cover;">
+                        </div>
+
+                        <div class="profile-info">
+                            <h4>{{ supervisor.get_full_name|default:supervisor.email }}</h4>
+                            <p>Supervisor</p>
+
+                            <svg width="12" height="12" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+
+                    </button>
+
+
+                    <div class="profile-dropdown" id="profileDropdown">
+
+                        <div class="dropdown-user">
+                            <strong>{{ supervisor.get_full_name }}</strong>
+                            <small>{{ supervisor.email }}</small>
+                        </div>
+
+                        <button type="button" id="editProfileButton">
+                            Edit Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD BODY -->
+        <section class="dashboard-body">
+
+            <!-- DJANGO SUCCESS AND ERROR MESSAGES -->
+            {% if messages %}
+                <div class="dashboard-messages">
+                    {% for message in messages %}
+                        <div class="dashboard-message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            <!-- SUMMARY CARDS -->
+            <div class="summary-cards-grid">
+
+                <div class="summary-card">
+                    <div class="icon-box blue">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ assigned_groups_count|stringformat:"02d" }}</h2>
+                        <p>Assigned Groups</p>
+                        <span>Groups under supervision</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box green">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ total_students|stringformat:"02d" }}</h2>
+                        <p>Total Students</p>
+                        <span>Across your groups</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box orange">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ pending_reviews_count|stringformat:"02d" }}</h2>
+                        <p>Pending Reviews</p>
+                        <span>Proposals & Documents</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box purple">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ pending_meetings_count|stringformat:"02d" }}</h2>
+                        <p>Meeting Requests</p>
+                        <span>Awaiting response</span>
+                    </div>
+                </div>
+
+
+                <div class="summary-card">
+                    <div class="icon-box darkblue">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ projects_in_progress|stringformat:"02d" }}</h2>
+                        <p>Projects in Progress</p>
+                        <span>Approved FYP projects</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- MAIN GRID -->
+            <div class="main-grid">
+
+                <!-- LEFT COLUMN -->
+                <div class="grid-left">
+
+                    <!-- ASSIGNED GROUPS -->
+                    <div class="content-card">
+
+                        <div class="card-header">
+
+                            <div class="title">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2"
+                                     style="color:#d5ad54;">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+
+                                <h3>My Assigned Groups</h3>
+                            </div>
+
+                            <a href="{% url 'assigned_groups' %}">View All &rarr;</a>
+
+                        </div>
+
+
+                        <table class="data-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Project Title</th>
+                                    <th>Students</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for group in assigned_groups %}
+                                    <tr>
+                                        <td>{{ group.group_name }}</td>
+                                        <td>{{ group.project_title }}</td>
+                                        <td>{{ group.student_count }}</td>
+                                        <td>
+                                            <span class="badge {% if group.status == 'approved' %}success{% else %}outline{% endif %}">
+                                                {{ group.get_status_display }}
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4">
+                                            No groups have been assigned to you yet.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- UPCOMING MEETINGS -->
+                    <div class="content-card">
+
+                        <div class="card-header">
+
+                            <div class="title">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2"
+                                     style="color:#d5ad54;">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+
+                                <h3>Upcoming Meetings</h3>
+                            </div>
+
+                            <a href="{% url 'meetings' %}">View All &rarr;</a>
+
+                        </div>
+
+
+                        <table class="data-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Group</th>
+                                    <th>Agenda</th>
+                                    <th>Mode</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for meeting in upcoming_meetings %}
+                                    <tr>
+                                        <td>
+                                            {{ meeting.meeting_date|date:"d M Y" }},
+                                            {{ meeting.meeting_time|time:"h:i A" }}
+                                        </td>
+
+                                        <td>{{ meeting.project_group.group_name }}</td>
+
+                                        <td>
+                                            {{ meeting.agenda|default:"Project Meeting" }}
+                                        </td>
+
+                                        <td>
+                                            <span class="badge outline">
+                                                {{ meeting.get_mode_display }}
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4">
+                                            No upcoming meetings found.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT COLUMN -->
+                <div class="grid-right">
+
+                    <!-- PENDING ACTIONS -->
+                    <div class="content-card pending-actions">
+
+                        <div class="card-header"
+                             style="background:#f4f6fa;margin:-22px -22px 20px -22px;padding:15px 22px;border-bottom:1px solid #e9edf3;border-radius:10px 10px 0 0;">
+
+                            <div class="title">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="#d97706" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+
+                                <h3>Pending Actions</h3>
+                            </div>
+
+                        </div>
+
+
+                        <ul class="action-list">
+
+                            <li>
+                                <div class="action-text">
+                                    <svg width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="#3569a8" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                    </svg>
+
+                                    <span class="count">{{ pending_proposals_count }}</span>
+                                    Proposal(s) to Review
+                                </div>
+
+                                <a href="{% url 'proposal_reviews' %}" class="btn-secondary">
+                                    Review Now &rarr;
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <div class="action-text">
+                                    <svg width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="#3569a8" stroke-width="2">
+                                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                                        <polyline points="13 2 13 9 20 9"/>
+                                    </svg>
+
+                                    <span class="count">{{ pending_documents_count }}</span>
+                                    Document(s) to Review
+                                </div>
+
+                                <a href="{% url 'document_reviews' %}" class="btn-secondary">
+                                    Review Now &rarr;
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <div class="action-text">
+                                    <svg width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="#3569a8" stroke-width="2">
+                                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                                    </svg>
+
+                                    <span class="count">{{ pending_progress_count }}</span>
+                                    Progress Update(s)
+                                </div>
+
+                                <a href="{% url 'student_progress' %}" class="btn-secondary">
+                                    View Details &rarr;
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- RECENT ACTIVITIES -->
+                    <div class="content-card recent-activities">
+
+                        <div class="card-header"
+                             style="background:#f4f6fa;margin:-22px -22px 20px -22px;padding:15px 22px;border-bottom:1px solid #e9edf3;border-radius:10px 10px 0 0;">
+
+                            <div class="title">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="#d5ad54" stroke-width="2">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                                </svg>
+
+                                <h3>Recent Activities</h3>
+                            </div>
+
+                        </div>
+
+
+                        <ul class="timeline">
+
+                            {% for activity in recent_activities %}
+                                <li>
+                                    <div class="dot {{ activity.color }}"></div>
+
+                                    <div class="timeline-content">
+                                        <span class="time">
+                                            {{ activity.timestamp|timesince }} ago
+                                        </span>
+
+                                        <p>{{ activity.description }}</p>
+                                    </div>
+                                </li>
+
+                            {% empty %}
+                                <li>
+                                    <div class="timeline-content">
+                                        <p>No recent activities available.</p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- EDIT PROFILE MODAL -->
+<div class="profile-modal" id="profileModal">
+
+    <div class="profile-modal-content">
+
+        <div class="modal-header">
+            <h2>Edit Profile</h2>
+
+            <button type="button" id="closeProfileModal" aria-label="Close">
+                &times;
+            </button>
+        </div>
+
+
+        <form method="POST" action="{% url 'supervisor_dashboard' %}">
+
+            {% csrf_token %}
+
+            <input type="hidden" name="action" value="update_profile">
+
+            <label for="first_name">First Name</label>
+            <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                value="{{ supervisor.first_name }}"
+                required
+            >
+
+            <label for="last_name">Last Name</label>
+            <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                value="{{ supervisor.last_name }}"
+                required
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                value="{{ supervisor.email }}"
+                required
+            >
+
+            <div class="modal-actions">
+
+                <button type="button" id="cancelProfileModal">
+                    Cancel
+                </button>
+
+                <button type="submit">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+
+    const profileButton = document.getElementById('profileButton');
+    const profileDropdown = document.getElementById('profileDropdown');
+
+    const editProfileButton = document.getElementById('editProfileButton');
+    const profileModal = document.getElementById('profileModal');
+
+    const closeProfileModal = document.getElementById('closeProfileModal');
+    const cancelProfileModal = document.getElementById('cancelProfileModal');
+
+
+    // Open and close notification dropdown
+    notificationButton.addEventListener('click', function (event) {
+
+        event.stopPropagation();
+
+        notificationDropdown.classList.toggle('show');
+        profileDropdown.classList.remove('show');
+
+        notificationButton.setAttribute(
+            'aria-expanded',
+            notificationDropdown.classList.contains('show')
+        );
+
+    });
+
+
+    // Open and close profile dropdown
+    profileButton.addEventListener('click', function (event) {
+
+        event.stopPropagation();
+
+        profileDropdown.classList.toggle('show');
+        notificationDropdown.classList.remove('show');
+
+        notificationButton.setAttribute('aria-expanded', 'false');
+
+    });
+
+
+    // Open Edit Profile modal
+    editProfileButton.addEventListener('click', function () {
+
+        profileDropdown.classList.remove('show');
+        profileModal.classList.add('show');
+
+    });
+
+
+    // Close Edit Profile modal
+    closeProfileModal.addEventListener('click', function () {
+
+        profileModal.classList.remove('show');
+
+    });
+
+
+    // Cancel editing
+    cancelProfileModal.addEventListener('click', function () {
+
+        profileModal.classList.remove('show');
+
+    });
+
+
+    // Close modal when clicking outside the form
+    profileModal.addEventListener('click', function (event) {
+
+        if (event.target === profileModal) {
+            profileModal.classList.remove('show');
+        }
+
+    });
+
+
+    // Close dropdowns when clicking elsewhere
+    document.addEventListener('click', function (event) {
+
+        if (!event.target.closest('.notification-wrapper')) {
+            notificationDropdown.classList.remove('show');
+            notificationButton.setAttribute('aria-expanded', 'false');
+        }
+
+        if (!event.target.closest('.profile-wrapper')) {
+            profileDropdown.classList.remove('show');
+        }
+
+    });
+
+});
+</script>
+
+</body>
+</html>

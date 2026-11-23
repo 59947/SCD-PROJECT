@@ -1,0 +1,276 @@
+
+/* =========================================
+   DOCUMENT SUBMISSION PAGE
+   Uses the existing Student Dashboard layout
+========================================= */
+
+/* MAIN DOCUMENT PAGE */
+
+.document-page {
+    width: 100%;
+    padding: 25px 30px;
+    color: #263445;
+}
+
+/* PAGE HEADER */
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #17365d;
+    margin-bottom: 8px;
+}
+
+.page-header p {
+    font-size: 14px;
+    color: #777777;
+}
+
+
+/* DOCUMENT UPLOAD CARD */
+
+.document-card,
+.history-card {
+    width: 100%;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eeeeee;
+}
+
+
+/* SECTION HEADINGS */
+
+.section-heading {
+    margin-bottom: 25px;
+}
+
+.section-heading h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #17365d;
+    margin-bottom: 7px;
+}
+
+.section-heading p {
+    font-size: 13px;
+    color: #888888;
+}
+
+
+/* FORM GROUPS */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #344054;
+    margin-bottom: 9px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d9dee7;
+    border-radius: 7px;
+    font-size: 14px;
+    color: #333333;
+    background: #ffffff;
+    outline: none;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #173f73;
+    box-shadow: 0 0 0 3px rgba(23, 63, 115, 0.08);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.form-group input[type="date"] {
+    cursor: pointer;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 7px;
+    color: #888888;
+    font-size: 12px;
+}
+
+
+/* SUBMIT BUTTON */
+
+.submit-btn {
+    display: inline-block;
+    background: #173f73;
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background: #102e55;
+}
+
+
+/* SUBMISSION HISTORY TABLE */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.history-card table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+.history-card th {
+    background: #f3f6fa;
+    color: #344054;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 15px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.history-card td {
+    padding: 15px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 13px;
+    color: #555555;
+}
+
+.history-card tbody tr:hover {
+    background: #f9fbfd;
+}
+
+
+/* REVIEW STATUS */
+
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #9a6700;
+}
+
+.status.under-review {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status.approved {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status.revision-required {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+/* DOWNLOAD BUTTON */
+
+.download-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #eaf1f9;
+    color: #173f73;
+    padding: 7px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.download-btn:hover {
+    background: #173f73;
+    color: #ffffff;
+}
+
+
+/* EMPTY HISTORY MESSAGE */
+
+.empty-message {
+    text-align: center !important;
+    padding: 25px !important;
+    color: #888888 !important;
+}
+
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 992px) {
+    .document-page {
+        padding: 22px 20px;
+    }
+
+    .document-card,
+    .history-card {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 768px) {
+    .document-page {
+        padding: 18px 12px;
+    }
+
+    .document-card,
+    .history-card {
+        padding: 18px;
+    }
+
+    .page-header h1 {
+        font-size: 23px;
+    }
+
+    .section-heading h2 {
+        font-size: 18px;
+    }
+
+    .submit-btn {
+        width: 100%;
+    }
+}

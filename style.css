@@ -1,0 +1,310 @@
+
+/* ==============================
+   GENERAL SETTINGS
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6fa;
+    color: #263449;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ==============================
+   MAIN WELCOME PAGE
+============================== */
+
+.welcome-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        linear-gradient(rgba(7, 25, 49, 0.78), rgba(7, 25, 49, 0.88)),
+        url("../images/campus.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* ==============================
+   NAVIGATION BAR
+============================== */
+
+.navbar {
+    width: 100%;
+    min-height: 85px;
+    padding: 15px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    background: rgba(8, 27, 51, 0.55);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+}
+
+.brand-icon {
+    width: 43px;
+    height: 43px;
+    background: #d5ad54;
+    color: #10294b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.brand strong {
+    display: block;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+.brand small {
+    display: block;
+    font-size: 9px;
+    color: #d5ad54;
+    letter-spacing: 2px;
+    margin-top: 4px;
+}
+
+.nav-label {
+    color: #e0e6ee;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+}
+
+/* ==============================
+   HERO SECTION
+============================== */
+
+.hero {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 55px 7%;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 1150px;
+    text-align: center;
+}
+
+.eyebrow {
+    display: inline-block;
+    color: #e1bc6c;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 17px;
+}
+
+.hero h1 {
+    color: #ffffff;
+    font-size: 39px;
+    line-height: 1.35;
+    font-weight: 700;
+}
+
+.hero h1 span {
+    display: block;
+    color: #e0b958;
+}
+
+.description {
+    max-width: 650px;
+    margin: 16px auto 35px;
+    color: #d3dce8;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* ==============================
+   MODULE SELECTION HEADING
+============================== */
+
+.section-heading {
+    margin-bottom: 23px;
+}
+
+.section-heading h2 {
+    color: white;
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.section-heading p {
+    color: #c5d0de;
+    font-size: 12px;
+}
+
+/* ==============================
+   MODULE CARDS
+============================== */
+
+.module-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: left;
+}
+
+.module-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 11px;
+    padding: 25px 23px;
+    min-height: 255px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.module-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+.student-card {
+    border-top: 4px solid #d5ad54;
+    cursor: pointer;
+}
+
+.module-icon {
+    width: 43px;
+    height: 43px;
+    background: #edf2f8;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.module-number {
+    position: absolute;
+    right: 22px;
+    top: 23px;
+    font-size: 12px;
+    color: #a3adba;
+    font-weight: 700;
+}
+
+.module-card h3 {
+    color: #10294b;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.module-card p {
+    color: #77869a;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 17px;
+}
+
+.module-action {
+    margin-top: auto;
+    color: #a17c2f;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.arrow {
+    margin-left: 5px;
+    font-size: 17px;
+}
+
+.coming-soon {
+    margin-top: auto;
+    align-self: flex-start;
+    background: #eef1f5;
+    color: #8490a0;
+    padding: 7px 11px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ==============================
+   FOOTER
+============================== */
+
+.footer {
+    padding: 17px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.footer p {
+    color: #c4cfdd;
+    font-size: 11px;
+}
+
+/* ==============================
+   RESPONSIVE DESIGN
+============================== */
+
+@media (max-width: 850px) {
+
+    .module-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .navbar {
+        padding: 15px 5%;
+    }
+
+    .nav-label {
+        display: none;
+    }
+
+    .hero {
+        padding: 40px 5%;
+    }
+
+    .hero h1 {
+        font-size: 27px;
+    }
+
+    .module-container {
+        grid-template-columns: 1fr;
+    }
+
+    .module-card {
+        min-height: 220px;
+    }
+
+}

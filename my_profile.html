@@ -1,0 +1,375 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | FYP Management System</title>
+
+    <link rel="stylesheet"
+          href="{% static 'students/css/student-dashboard.css' %}">
+
+    <style>
+        body {
+            background: #f5f7fa;
+        }
+
+        .profile-page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .profile-topbar {
+            background: #10294b;
+            padding: 20px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .profile-topbar h2 {
+            font-size: 21px;
+            margin-bottom: 5px;
+        }
+
+        .profile-topbar p {
+            color: #d5dce6;
+            font-size: 13px;
+        }
+
+        .back-button {
+            background: #d5ad54;
+            color: #10294b;
+            padding: 11px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .back-button:hover {
+            background: #e6c575;
+        }
+
+        .profile-page-heading {
+            margin-bottom: 25px;
+        }
+
+        .profile-page-heading h1 {
+            color: #10294b;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .profile-page-heading p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #edf0f4;
+        }
+
+        .profile-card-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #edf0f4;
+            margin-bottom: 25px;
+        }
+
+        .large-avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #10294b;
+            color: #d5ad54;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .profile-card-header h2 {
+            color: #10294b;
+            font-size: 21px;
+            margin-bottom: 7px;
+        }
+
+        .profile-card-header p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .profile-section-title {
+            color: #10294b;
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        .profile-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .detail-item label {
+            display: block;
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .detail-item input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dfe4eb;
+            border-radius: 7px;
+            background: #f8fafc;
+            color: #10294b;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .detail-item input:focus {
+            border-color: #d5ad54;
+            background: white;
+        }
+
+        .detail-item input[readonly] {
+            background: #edf0f4;
+            cursor: not-allowed;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 13px;
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid #edf0f4;
+        }
+
+        .action-button {
+            padding: 12px 23px;
+            border-radius: 7px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .cancel-button {
+            background: #edf0f4;
+            color: #10294b;
+        }
+
+        .cancel-button:hover {
+            background: #dfe4eb;
+        }
+
+        .save-button {
+            background: #10294b;
+            color: white;
+        }
+
+        .save-button:hover {
+            background: #1b3c65;
+        }
+
+        .not-logged-in {
+            background: #fff8e8;
+            border: 1px solid #f0d99e;
+            color: #765b18;
+            padding: 22px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 650px) {
+            .profile-topbar {
+                padding: 18px;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .profile-page {
+                padding: 18px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .profile-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+
+            .action-button {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP HEADER -->
+    <header class="profile-topbar">
+
+        <div>
+            <h2>RIPHAH</h2>
+            <p>FYP MANAGEMENT SYSTEM</p>
+        </div>
+
+        <a href="{% url 'student_dashboard' %}"
+           class="back-button">
+            ← Back to Dashboard
+        </a>
+
+    </header>
+
+
+    <!-- PROFILE CONTENT -->
+    <main class="profile-page">
+
+        <div class="profile-page-heading">
+            <h1>My Profile</h1>
+            <p>View and update your personal account information.</p>
+        </div>
+
+
+        {% if profile_user %}
+
+        <div class="profile-card">
+
+            <!-- PROFILE HEADER -->
+            <div class="profile-card-header">
+
+                <div class="large-avatar">
+                    {{ profile_user.first_name|default:profile_user.username|first|upper }}
+                </div>
+
+                <div>
+                    <h2>
+                        {{ profile_user.get_full_name|default:profile_user.username }}
+                    </h2>
+
+                    <p>Student Account</p>
+                </div>
+
+            </div>
+
+
+            <!-- EDITABLE PROFILE FORM -->
+            <form method="POST" id="profileForm">
+
+                {% csrf_token %}
+
+                <h3 class="profile-section-title">
+                    Personal Information
+                </h3>
+
+                <div class="profile-details-grid">
+
+                    <div class="detail-item">
+                        <label>First Name</label>
+                        <input type="text"
+                               name="first_name"
+                               value="{{ profile_user.first_name }}"
+                               placeholder="Enter first name">
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Last Name</label>
+                        <input type="text"
+                               name="last_name"
+                               value="{{ profile_user.last_name }}"
+                               placeholder="Enter last name">
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Username</label>
+                        <input type="text"
+                               value="{{ profile_user.username }}"
+                               readonly>
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Email Address</label>
+                        <input type="email"
+                               name="email"
+                               value="{{ profile_user.email }}"
+                               placeholder="Enter email address">
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Account Type</label>
+                        <input type="text"
+                               value="Student"
+                               readonly>
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Account Created</label>
+                        <input type="text"
+                               value="{{ profile_user.date_joined|date:'d M Y' }}"
+                               readonly>
+                    </div>
+
+                </div>
+
+
+                <!-- PROFILE ACTIONS -->
+                <div class="profile-actions">
+
+                    <button type="reset"
+                            class="action-button cancel-button">
+                        Cancel Changes
+                    </button>
+
+                    <button type="submit"
+                            class="action-button save-button">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="not-logged-in">
+
+            <h3>Student is not logged in.</h3>
+
+            <p>
+                Please log in to view your personal profile information.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+</html>

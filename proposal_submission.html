@@ -1,0 +1,620 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Proposal Submission | FYP Management System</title>
+
+    <link rel="stylesheet"
+          href="{% static 'students/css/proposal-submission.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">R</div>
+            <div class="brand-text">
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT SYSTEM</p>
+            </div>
+        </div>
+
+        <div class="sidebar-heading">STUDENT MENU</div>
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'student_dashboard' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="8" height="8" rx="1"/>
+                    <rect x="13" y="3" width="8" height="5" rx="1"/>
+                    <rect x="13" y="10" width="8" height="11" rx="1"/>
+                    <rect x="3" y="13" width="8" height="8" rx="1"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="{% url 'my_project_group' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'my_project_group' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3"/>
+                    <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+                    <path d="M16 5.5a3 3 0 0 1 0 5.8"/>
+                    <path d="M18 14c1.8.8 3 2.5 3 4.5"/>
+                </svg>
+                Project Group
+            </a>
+
+            <a href="{% url 'proposal_submission' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'proposal_submission' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/>
+                    <path d="M8 13h8"/>
+                    <path d="M8 17h8"/>
+                </svg>
+                Proposal Submission
+            </a>
+
+            <a href="{% url 'proposal_status' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'proposal_status' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l3 2"/>
+                </svg>
+                Proposal Status
+            </a>
+
+            <a href="{% url 'progress_updates' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'progress_updates' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 3v18h18"/>
+                    <path d="m7 14 4-4 4 3 6-7"/>
+                </svg>
+                Progress Updates
+            </a>
+
+            <a href="{% url 'document_submission' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'document_submission' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/>
+                    <path d="M12 18v-6"/>
+                    <path d="m9 15 3-3 3 3"/>
+                </svg>
+                Document Submission
+            </a>
+
+            <a href="{% url 'supervisor_feedback' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'supervisor_feedback' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>
+                </svg>
+                Supervisor Feedback
+            </a>
+
+            <a href="{% url 'meetings' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'meetings' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="17" rx="2"/>
+                    <path d="M16 2v4"/>
+                    <path d="M8 2v4"/>
+                    <path d="M3 10h18"/>
+                    <path d="m9 15 2 2 4-4"/>
+                </svg>
+                Meetings
+            </a>
+
+            <a href="{% url 'student_dashboard' %}#recent-notifications"
+               class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                    <path d="M10 21h4"/>
+                </svg>
+                Notifications
+            </a>
+
+        </nav>
+
+        <!-- LOGOUT -->
+        <div class="sidebar-bottom">
+            <a href="{% url 'student_logout' %}" class="menu-item logout">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <path d="M16 17l5-5-5-5"/>
+                    <path d="M21 12H9"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+                <h2>Proposal Submission</h2>
+                <p>Submit your FYP proposal for review and approval</p>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        {{ request.user.first_name|first|upper|default:"S" }}
+                    </div>
+
+                    <div>
+                        <h4>
+                            {{ request.user.get_full_name|default:request.user.username }}
+                        </h4>
+                        <p>Student</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+        <section class="page-content">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="page-heading">
+
+                <div>
+                    <h1>Submit Project Proposal</h1>
+                    <p>
+                        Provide your project information and upload your
+                        proposal document for approval.
+                    </p>
+                </div>
+
+                <span class="submission-status">
+                    {% if proposal %}
+                        {{ proposal.get_status_display }}
+                    {% else %}
+                        Not Submitted
+                    {% endif %}
+                </span>
+
+            </div>
+
+
+            <!-- GROUP INFORMATION -->
+            {% if project_group %}
+
+            <section class="content-card">
+
+                <div class="card-heading">
+                    <div>
+                        <h3>Group Information</h3>
+                        <p>Your registered project group details</p>
+                    </div>
+
+                    <span class="prefilled-tag">Group Details</span>
+                </div>
+
+                <div class="group-info-grid">
+
+                    <div class="info-item">
+                        <span>GROUP NAME</span>
+                        <h4>{{ project_group.group_name }}</h4>
+                    </div>
+
+                    <div class="info-item">
+                        <span>GROUP LEADER</span>
+                        <h4>
+                            {{ project_group.leader.user.get_full_name }}
+                        </h4>
+                    </div>
+
+                    <div class="info-item">
+                        <span>GROUP MEMBERS</span>
+                        <h4>{{ project_group.members.count }} Members</h4>
+                    </div>
+
+                    <div class="info-item">
+                        <span>SUPERVISOR</span>
+                        <h4>
+                            {% if project_group.supervisor %}
+                                {{ project_group.supervisor.get_full_name }}
+                            {% else %}
+                                Not Assigned Yet
+                            {% endif %}
+                        </h4>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PROPOSAL FORM -->
+            <form id="proposalForm"
+                  method="POST"
+                  action="{% url 'proposal_submission' %}"
+                  enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <!-- Django reads this field to decide draft or submit -->
+                <input type="hidden"
+                       name="proposal_action"
+                       id="proposalAction"
+                       value="submit">
+
+
+                <!-- PROJECT INFORMATION -->
+                <section class="content-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Project Information</h3>
+                            <p>Enter the basic information about your FYP.</p>
+                        </div>
+
+                        <span class="section-number">01</span>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full-width">
+                            <label for="projectTitle">
+                                Project Title <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="projectTitle"
+                                name="project_title"
+                                placeholder="Enter your project title"
+                                value="{{ proposal.project_title|default:project_group.project_title }}"
+                                required
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="projectCategory">
+                                Project Category <span>*</span>
+                            </label>
+
+                            <select
+                                id="projectCategory"
+                                name="project_category"
+                                required
+                            >
+                                <option value="">Select project category</option>
+
+                                <option value="Artificial Intelligence"
+                                    {% if proposal.project_category == "Artificial Intelligence" %}selected{% endif %}>
+                                    Artificial Intelligence
+                                </option>
+
+                                <option value="Machine Learning"
+                                    {% if proposal.project_category == "Machine Learning" %}selected{% endif %}>
+                                    Machine Learning
+                                </option>
+
+                                <option value="Web Development"
+                                    {% if proposal.project_category == "Web Development" %}selected{% endif %}>
+                                    Web Development
+                                </option>
+
+                                <option value="Mobile Application"
+                                    {% if proposal.project_category == "Mobile Application" %}selected{% endif %}>
+                                    Mobile Application
+                                </option>
+
+                                <option value="Computer Vision"
+                                    {% if proposal.project_category == "Computer Vision" %}selected{% endif %}>
+                                    Computer Vision
+                                </option>
+
+                                <option value="Cyber Security"
+                                    {% if proposal.project_category == "Cyber Security" %}selected{% endif %}>
+                                    Cyber Security
+                                </option>
+
+                                <option value="Internet of Things"
+                                    {% if proposal.project_category == "Internet of Things" %}selected{% endif %}>
+                                    Internet of Things
+                                </option>
+
+                                <option value="Other"
+                                    {% if proposal.project_category == "Other" %}selected{% endif %}>
+                                    Other
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="projectDomain">Project Domain</label>
+
+                            <input
+                                type="text"
+                                id="projectDomain"
+                                name="project_domain"
+                                placeholder="e.g. Healthcare, Education, Business"
+                                value="{{ proposal.project_domain|default:'' }}"
+                            >
+                        </div>
+
+
+                        <div class="form-group full-width">
+                            <label for="projectDescription">
+                                Project Description <span>*</span>
+                            </label>
+
+                            <textarea
+                                id="projectDescription"
+                                name="project_description"
+                                rows="4"
+                                placeholder="Briefly explain what your project will do..."
+                                required
+                            >{{ proposal.project_description|default:'' }}</textarea>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- PROBLEM STATEMENT AND OBJECTIVES -->
+                <section class="content-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Problem Statement & Objectives</h3>
+                            <p>Explain the problem your project will solve.</p>
+                        </div>
+
+                        <span class="section-number">02</span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="problemStatement">
+                            Problem Statement <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="problemStatement"
+                            name="problem_statement"
+                            rows="5"
+                            placeholder="Describe the real-world problem, why it exists, and why it needs to be solved..."
+                            required
+                        >{{ proposal.problem_statement|default:'' }}</textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="projectObjectives">
+                            Project Objectives <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="projectObjectives"
+                            name="project_objectives"
+                            rows="4"
+                            placeholder="Write the main goals your project aims to achieve..."
+                            required
+                        >{{ proposal.project_objectives|default:'' }}</textarea>
+                    </div>
+
+                </section>
+
+
+                <!-- PROJECT DETAILS -->
+                <section class="content-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Project Details</h3>
+                            <p>Describe the planned functionality and technology.</p>
+                        </div>
+
+                        <span class="section-number">03</span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="proposedFeatures">
+                            Proposed Features <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="proposedFeatures"
+                            name="proposed_features"
+                            rows="4"
+                            placeholder="List the major features and functionalities of your project..."
+                            required
+                        >{{ proposal.proposed_features|default:'' }}</textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="technologies">
+                            Technologies & Tools <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="technologies"
+                            name="technologies"
+                            rows="3"
+                            placeholder="e.g. Python, Django, HTML, CSS, JavaScript, MySQL..."
+                            required
+                        >{{ proposal.technologies|default:'' }}</textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="expectedOutcomes">
+                            Expected Outcomes <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="expectedOutcomes"
+                            name="expected_outcomes"
+                            rows="4"
+                            placeholder="Explain what you expect to achieve after completing the project..."
+                            required
+                        >{{ proposal.expected_outcomes|default:'' }}</textarea>
+                    </div>
+
+                </section>
+
+
+                <!-- PROPOSAL DOCUMENT -->
+                <section class="content-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Upload Proposal Document</h3>
+                            <p>Upload the complete FYP proposal document.</p>
+                        </div>
+
+                        <span class="section-number">04</span>
+                    </div>
+
+
+                    <div class="upload-area">
+
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 16V4"/>
+                                <path d="m7 9 5-5 5 5"/>
+                                <path d="M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/>
+                            </svg>
+                        </div>
+
+                        <h4>Upload Your Proposal</h4>
+
+                        <p>
+                            Choose your proposal file from your computer.
+                        </p>
+
+                        <label for="proposalFile" class="browse-button">
+                            Browse Files
+                        </label>
+
+                        <input
+                            type="file"
+                            id="proposalFile"
+                            name="proposal_file"
+                            accept=".pdf,.doc,.docx"
+                            {% if not proposal.proposal_file %}required{% endif %}
+                        >
+
+                        <p class="file-requirement">
+                            Supported formats: PDF, DOC, DOCX | Maximum size: 10 MB
+                        </p>
+
+                        <div id="fileName" class="file-name">
+
+                            {% if proposal.proposal_file %}
+                                Current file:
+                                <a href="{{ proposal.proposal_file.url }}" target="_blank">
+                                    {{ proposal.proposal_file.name|cut:"proposals/" }}
+                                </a>
+                            {% else %}
+                                No file selected
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- SUBMISSION BUTTONS -->
+                <div class="form-actions">
+
+                    <button type="reset" class="reset-button">
+                        Reset Form
+                    </button>
+
+
+                    <!-- Draft skips browser required-field validation -->
+                    <button
+                        type="submit"
+                        class="draft-button"
+                        id="draftButton"
+                        formnovalidate
+                    >
+                        Save as Draft
+                    </button>
+
+
+                    <!-- Normal submission validates required fields -->
+                    <button
+                        type="submit"
+                        class="submit-button"
+                        id="submitButton"
+                    >
+                        Submit Proposal
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <p class="form-note">
+                    Please review all information before submitting your proposal.
+                </p>
+
+            </form>
+
+            {% else %}
+
+                <section class="content-card">
+                    <h3>No Project Group Found</h3>
+                    <p>
+                        You must create or join a project group before
+                        submitting your FYP proposal.
+                    </p>
+                    <a href="{% url 'my_project_group' %}">
+                        Go to Project Group
+                    </a>
+                </section>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- LOAD JAVASCRIPT ONLY ONCE -->
+<script src="{% static 'students/js/proposal-submission.js' %}"></script>
+
+</body>
+</html>

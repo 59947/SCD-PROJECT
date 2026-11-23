@@ -1,0 +1,145 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FYP Management System | Welcome</title>
+
+    <link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+</head>
+
+<body>
+
+    <main class="welcome-page">
+
+        <!-- Navigation Bar -->
+        <header class="navbar">
+
+            <a href="/" class="brand">
+                <span class="brand-icon">F</span>
+                <span>
+                    <strong>FYP MANAGEMENT</strong>
+                    <small>PROJECT PORTAL</small>
+                </span>
+            </a>
+
+            <div class="nav-label">
+                FINAL YEAR PROJECT MANAGEMENT SYSTEM
+            </div>
+
+        </header>
+
+
+        <!-- Main Welcome Section -->
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="eyebrow">UNIVERSITY PROJECT PORTAL</span>
+
+                <h1>
+                    Welcome to the
+                    <span>FYP Management System</span>
+                </h1>
+
+                <p class="description">
+                    A centralized platform to manage final year projects,
+                    collaborate with supervisors, and track your academic
+                    project journey.
+                </p>
+
+                <div class="section-heading">
+                    <h2>Select Your Module</h2>
+                    <p>Please select your role to continue.</p>
+                </div>
+
+
+                <!-- Module Selection Cards -->
+                <div class="module-container">
+
+                    <!-- Student Module -->
+                    <a href="{% url 'student_access' %}"
+                       class="module-card student-card">
+
+                        <div class="module-icon">🎓</div>
+
+                        <span class="module-number">01</span>
+
+                        <h3>Student</h3>
+
+                        <p>
+                            Submit project proposals, manage your group,
+                            upload documents and track project progress.
+                        </p>
+
+                        <span class="module-action">
+                            Enter Student Portal
+                            <span class="arrow">→</span>
+                        </span>
+
+                    </a>
+
+
+                    <!-- Supervisor Module (UPDATED TO BE CLICKABLE) -->
+                    <a href="{% url 'supervisor_access' %}"
+                       class="module-card student-card">
+
+                        <div class="module-icon">👨‍🏫</div>
+
+                        <span class="module-number">02</span>
+
+                        <h3>Supervisor</h3>
+
+                        <p>
+                            Manage assigned student groups, review
+                            submissions and provide project feedback.
+                        </p>
+
+                        <span class="module-action">
+                            Enter Supervisor Portal
+                            <span class="arrow">→</span>
+                        </span>
+
+                    </a>
+
+
+                    <!-- Admin Module -->
+                    <div class="module-card">
+
+                        <div class="module-icon">⚙️</div>
+
+                        <span class="module-number">03</span>
+
+                        <h3>Administrator</h3>
+
+                        <p>
+                            Manage project activities, coordinate
+                            assignments and oversee the FYP process.
+                        </p>
+
+                        <span class="coming-soon">COMING SOON</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                © 2026 FYP Management System.
+                All Rights Reserved.
+            </p>
+        </footer>
+
+    </main>
+
+</body>
+</html>

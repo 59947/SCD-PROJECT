@@ -1,0 +1,248 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Supervisor Portal | FYP Management System</title>
+
+    <link rel="stylesheet" href="{% static 'supervisors/css/supervisor-auth.css' %}">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <!-- LEFT SIDE: BACKGROUND IMAGE -->
+    <section class="auth-banner">
+
+        <div class="banner-content">
+
+            <div class="university-logo">R</div>
+
+            <p class="university-name">
+                RIPHAH INTERNATIONAL UNIVERSITY
+            </p>
+
+            <div class="gold-line"></div>
+
+            <h1>
+                Welcome to Your
+                <br>
+                <span>Supervisor Portal</span>
+            </h1>
+
+            <p class="banner-description">
+                Manage your assigned final year project groups,
+                review student progress, and guide academic
+                projects through one centralized platform.
+            </p>
+
+            <p class="banner-footer">
+                FINAL YEAR PROJECT MANAGEMENT SYSTEM
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT SIDE: LOGIN AND SIGNUP -->
+    <section class="auth-section">
+
+        <div class="auth-card">
+
+            <a href="/" class="back-home">← Back to Home</a>
+
+            <div class="form-heading">
+
+                <p class="small-heading">SUPERVISOR PORTAL</p>
+
+                <h2>Welcome!</h2>
+
+                <p>
+                    Login or create your supervisor account to continue.
+                </p>
+
+            </div>
+
+
+            <!-- DJANGO SUCCESS AND ERROR MESSAGES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="form-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- LOGIN AND SIGNUP TABS -->
+            <div class="auth-tabs">
+
+                <button
+                    type="button"
+                    class="tab-button active"
+                    id="loginTab">
+                    Login
+                </button>
+
+                <button
+                    type="button"
+                    class="tab-button"
+                    id="signupTab">
+                    Sign Up
+                </button>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+            <form
+                id="loginForm"
+                class="auth-form"
+                method="POST"
+                action="">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="form_type" value="login">
+
+                <label for="loginEmail">Email</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email">
+
+
+                <label for="loginPassword">Password</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password">
+
+
+                <div class="form-options">
+
+                    <span></span>
+
+                    <a href="#" id="forgotPassword">
+                        Forgot Password?
+                    </a>
+
+                </div>
+
+
+                <button type="submit" class="submit-button">
+                    Login
+                </button>
+
+
+                <p class="switch-text">
+                    Don't have an account?
+                    <a href="#" id="openSignup">Sign Up</a>
+                </p>
+
+            </form>
+
+
+            <!-- SIGNUP FORM -->
+            <form
+                id="signupForm"
+                class="auth-form hidden"
+                method="POST"
+                action="">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="form_type" value="signup">
+
+
+                <label for="firstName">First Name</label>
+
+                <input
+                    type="text"
+                    id="firstName"
+                    name="first_name"
+                    placeholder="Enter your first name"
+                    required
+                    autocomplete="given-name">
+
+
+                <label for="lastName">Last Name</label>
+
+                <input
+                    type="text"
+                    id="lastName"
+                    name="last_name"
+                    placeholder="Enter your last name"
+                    required
+                    autocomplete="family-name">
+
+
+                <label for="signupEmail">Email</label>
+
+                <input
+                    type="email"
+                    id="signupEmail"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email">
+
+
+                <label for="signupPassword">Password</label>
+
+                <input
+                    type="password"
+                    id="signupPassword"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                    autocomplete="new-password">
+
+
+                <label for="confirmPassword">Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirm_password"
+                    placeholder="Confirm your password"
+                    required
+                    autocomplete="new-password">
+
+
+                <button type="submit" class="submit-button">
+                    Create Account
+                </button>
+
+
+                <p class="switch-text">
+                    Already have an account?
+                    <a href="#" id="openLogin">Login</a>
+                </p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="{% static 'supervisors/js/supervisor-auth.js' %}"></script>
+
+</body>
+</html>

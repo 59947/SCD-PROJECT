@@ -1,0 +1,232 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Portal | FYP Management System</title>
+
+    <link rel="stylesheet"
+          href="{% static 'students/css/student-auth.css' %}">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <!-- LEFT SIDE -->
+    <section class="auth-banner">
+
+        <div class="banner-content">
+
+            <div class="university-logo">R</div>
+
+            <p class="university-name">
+                RIPHAH INTERNATIONAL UNIVERSITY
+            </p>
+
+            <div class="gold-line"></div>
+
+            <h1>
+                Welcome to Your<br>
+                <span>Student Portal</span>
+            </h1>
+
+            <p class="banner-description">
+                Manage your final year project, collaborate
+                with your supervisor, and follow your academic
+                journey through one centralized platform.
+            </p>
+
+            <p class="banner-footer">
+                FINAL YEAR PROJECT MANAGEMENT SYSTEM
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT SIDE -->
+    <section class="auth-section">
+
+        <div class="auth-card">
+
+            <a href="/" class="back-home">
+                ← Back to Home
+            </a>
+
+            <div class="form-heading">
+
+                <p class="small-heading">
+                    STUDENT PORTAL
+                </p>
+
+                <h2>Welcome!</h2>
+
+                <p>
+                    Login or create your student account
+                    to continue.
+                </p>
+
+            </div>
+
+            <!-- Django messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="form-message">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- TABS -->
+            <div class="auth-tabs">
+
+                <button type="button"
+                        class="tab-button active"
+                        id="loginTab">
+                    Login
+                </button>
+
+                <button type="button"
+                        class="tab-button"
+                        id="signupTab">
+                    Sign Up
+                </button>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm"
+                  class="auth-form"
+                  method="POST"
+                  action="{% url 'student_access' %}">
+
+                {% csrf_token %}
+
+                <input type="hidden"
+                       name="form_type"
+                       value="login">
+
+                <label>Email</label>
+
+                <input type="email"
+                       name="email"
+                       placeholder="Enter your email"
+                       autocomplete="email"
+                       required>
+
+                <label>Password</label>
+
+                <input type="password"
+                       name="password"
+                       placeholder="Enter your password"
+                       autocomplete="current-password"
+                       required>
+
+                <div class="form-options">
+                    <span></span>
+
+                    <a href="#" id="forgotPassword">
+                        Forgot Password?
+                    </a>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Login
+                </button>
+
+                <p class="switch-text">
+                    Don't have an account?
+                    <a href="#" id="openSignup">Sign Up</a>
+                </p>
+
+            </form>
+
+
+            <!-- SIGNUP FORM -->
+            <form id="signupForm"
+                  class="auth-form hidden"
+                  method="POST"
+                  action="{% url 'student_access' %}">
+
+                {% csrf_token %}
+
+                <input type="hidden"
+                       name="form_type"
+                       value="signup">
+
+                <label>First Name</label>
+
+                <input type="text"
+                       name="first_name"
+                       placeholder="Enter your first name"
+                       required>
+
+                <label>Last Name</label>
+
+                <input type="text"
+                       name="last_name"
+                       placeholder="Enter your last name"
+                       required>
+
+                <label>SAP ID</label>
+
+                <input type="text"
+                       name="sap_id"
+                       placeholder="Enter your SAP ID"
+                       required>
+
+                <label>Email</label>
+
+                <input type="email"
+                       name="email"
+                       placeholder="Enter your email"
+                       autocomplete="email"
+                       required>
+
+                <label>Password</label>
+
+                <input type="password"
+                       name="password"
+                       id="signupPassword"
+                       placeholder="Create a password"
+                       minlength="8"
+                       required>
+
+                <label>Confirm Password</label>
+
+                <input type="password"
+                       name="confirm_password"
+                       id="confirmPassword"
+                       placeholder="Confirm your password"
+                       minlength="8"
+                       required>
+
+                <button type="submit" class="submit-button">
+                    Create Account
+                </button>
+
+                <p class="switch-text">
+                    Already have an account?
+                    <a href="#" id="openLogin">Login</a>
+                </p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="{% static 'students/js/student-auth.js' %}"></script>
+
+</body>
+</html>

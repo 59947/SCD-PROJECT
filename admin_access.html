@@ -1,0 +1,428 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administrator Access | FYP Management System</title>
+
+    <link rel="stylesheet"
+          href="{% static 'admins/css/admin-auth.css' %}">
+
+    <style>
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #dce2e9;
+            background: #f5f7fa;
+            color: #263449;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .auth-tab.active {
+            background: #102747;
+            border-color: #102747;
+            color: #ffffff;
+        }
+
+        .auth-panel[hidden] {
+            display: none !important;
+        }
+
+        .auth-panel .auth-form {
+            margin-top: 15px;
+        }
+
+        .auth-message {
+            padding: 11px 13px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .auth-message.error {
+            background: #fff0f0;
+            color: #a52828;
+        }
+
+        .auth-message.success {
+            background: #eaf7ee;
+            color: #236b3b;
+        }
+
+        .auth-message.warning {
+            background: #fff8e7;
+            color: #805d12;
+        }
+
+        .auth-message.info {
+            background: #edf4ff;
+            color: #24518a;
+        }
+
+        .auth-field {
+            margin-bottom: 16px;
+        }
+
+        .auth-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #263449;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .auth-field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 13px;
+            border: 1px solid #dce2e9;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .auth-field input:focus {
+            border-color: #c69b42;
+            box-shadow: 0 0 0 2px rgba(198, 155, 66, 0.12);
+        }
+
+        .auth-note {
+            color: #777f8c;
+            font-size: 12px;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <!-- LEFT CAMPUS SECTION -->
+    <section class="auth-banner">
+
+        <div class="banner-content">
+
+            <div class="university-logo">R</div>
+
+            <p class="university-name">
+                RIPHAH INTERNATIONAL UNIVERSITY
+            </p>
+
+            <div class="banner-divider"></div>
+
+            <h1>
+                Final Year Project
+                <span>Management System</span>
+            </h1>
+
+            <p>
+                A centralized platform for managing Final Year Projects,
+                students, supervisors, proposals and project progress.
+            </p>
+
+            <div class="banner-footer">
+                ADMINISTRATOR PORTAL
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT AUTHENTICATION SECTION -->
+    <section class="auth-section">
+
+        <div class="auth-card">
+
+            <a href="/" class="back-home">
+                ← Back to Home
+            </a>
+
+            <div class="form-heading">
+
+                <p class="small-heading">
+                    ADMINISTRATION PORTAL
+                </p>
+
+                <h2>Welcome</h2>
+
+                <p>
+                    Access your FYP Management System administrator account.
+                </p>
+
+            </div>
+
+
+            <!-- DJANGO MESSAGES -->
+            {% if messages %}
+                <div class="auth-messages">
+
+                    {% for message in messages %}
+                        <div class="auth-message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+            {% endif %}
+
+
+            <!-- LOGIN / SIGNUP TABS -->
+            <div class="auth-tabs">
+
+                <button
+                    type="button"
+                    class="auth-tab {% if active_tab != 'signup' %}active{% endif %}"
+                    id="loginTab"
+                    onclick="showAuthTab('login')">
+
+                    Login
+
+                </button>
+
+                <button
+                    type="button"
+                    class="auth-tab {% if active_tab == 'signup' %}active{% endif %}"
+                    id="signupTab"
+                    onclick="showAuthTab('signup')">
+
+                    Sign Up
+
+                </button>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+            <div
+                class="auth-panel"
+                id="loginPanel"
+                {% if active_tab == 'signup' %}hidden{% endif %}>
+
+                <form
+                    method="POST"
+                    action="{% url 'admins:admin_access' %}"
+                    class="auth-form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="action" value="login">
+
+                    <div class="auth-field">
+
+                        <label for="loginEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            name="email"
+                            placeholder="Enter your email"
+                            value="{{ login_email|default:'' }}"
+                            required>
+
+                    </div>
+
+
+                    <div class="auth-field">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            name="password"
+                            placeholder="Enter your password"
+                            required>
+
+                    </div>
+
+
+                    <button type="submit" class="submit-button">
+                        Login to Dashboard
+                    </button>
+
+                </form>
+
+                {% if not account_exists %}
+                    <p class="auth-note">
+                        No Administrator account exists yet.
+                        Select Sign Up to create the first account.
+                    </p>
+                {% endif %}
+
+            </div>
+
+
+            <!-- SIGNUP FORM -->
+            <div
+                class="auth-panel"
+                id="signupPanel"
+                {% if active_tab != 'signup' %}hidden{% endif %}>
+
+                {% if account_exists %}
+
+                    <div class="auth-message info">
+                        An Administrator account has already been created.
+                        Please use the Login tab.
+                    </div>
+
+                    <button
+                        type="button"
+                        class="submit-button"
+                        onclick="showAuthTab('login')">
+
+                        Go to Login
+
+                    </button>
+
+                {% else %}
+
+                    <form
+                        method="POST"
+                        action="{% url 'admins:admin_access' %}"
+                        class="auth-form">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="action" value="signup">
+
+
+                        <div class="auth-field">
+
+                            <label for="signupName">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="signupName"
+                                name="name"
+                                placeholder="Enter your full name"
+                                value="{{ signup_name|default:'' }}"
+                                required>
+
+                        </div>
+
+
+                        <div class="auth-field">
+
+                            <label for="signupEmail">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="signupEmail"
+                                name="email"
+                                placeholder="Enter your email"
+                                value="{{ signup_email|default:'' }}"
+                                required>
+
+                        </div>
+
+
+                        <div class="auth-field">
+
+                            <label for="signupPassword">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="signupPassword"
+                                name="password"
+                                placeholder="Create a password"
+                                minlength="8"
+                                required>
+
+                        </div>
+
+
+                        <div class="auth-field">
+
+                            <label for="confirmPassword">
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirm_password"
+                                placeholder="Confirm your password"
+                                minlength="8"
+                                required>
+
+                        </div>
+
+
+                        <button type="submit" class="submit-button">
+                            Create Administrator Account
+                        </button>
+
+                        <p class="auth-note">
+                            Your password must contain at least 8 characters.
+                        </p>
+
+                    </form>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+    function showAuthTab(tab) {
+
+        const loginPanel = document.getElementById("loginPanel");
+        const signupPanel = document.getElementById("signupPanel");
+
+        const loginTab = document.getElementById("loginTab");
+        const signupTab = document.getElementById("signupTab");
+
+        if (tab === "signup") {
+
+            loginPanel.hidden = true;
+            signupPanel.hidden = false;
+
+            loginTab.classList.remove("active");
+            signupTab.classList.add("active");
+
+        } else {
+
+            signupPanel.hidden = true;
+            loginPanel.hidden = false;
+
+            signupTab.classList.remove("active");
+            loginTab.classList.add("active");
+
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Project Group | FYP Management System</title>
+    <link rel="stylesheet" href="{% static 'students/css/my-project-group.css' %}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">R</div>
+            <div class="brand-text">
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT SYSTEM</p>
+            </div>
+        </div>
+
+        <div class="sidebar-heading">MAIN MENU</div>
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'student_dashboard' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="8" height="8" rx="1"/>
+                    <rect x="13" y="3" width="8" height="5" rx="1"/>
+                    <rect x="13" y="10" width="8" height="11" rx="1"/>
+                    <rect x="3" y="13" width="8" height="8" rx="1"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="{% url 'my_project_group' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'my_project_group' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3"/>
+                    <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+                    <path d="M16 5.5a3 3 0 0 1 0 5.8"/>
+                    <path d="M18 14c1.8.8 3 2.5 3 4.5"/>
+                </svg>
+                Project Group
+            </a>
+
+            <a href="{% url 'proposal_submission' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/>
+                    <path d="M8 13h8"/>
+                    <path d="M8 17h8"/>
+                </svg>
+                Proposal Submission
+            </a>
+
+            <a href="{% url 'proposal_status' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l3 2"/>
+                </svg>
+                Proposal Status
+            </a>
+
+            <a href="{% url 'progress_updates' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 3v18h18"/>
+                    <path d="m7 14 4-4 4 3 6-7"/>
+                </svg>
+                Progress Updates
+            </a>
+
+            <a href="{% url 'document_submission' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/>
+                    <path d="M12 18v-6"/>
+                    <path d="m9 15 3-3 3 3"/>
+                </svg>
+                Document Submission
+            </a>
+
+            <a href="{% url 'supervisor_feedback' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>
+                </svg>
+                Supervisor Feedback
+            </a>
+
+            <a href="{% url 'meetings' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="17" rx="2"/>
+                    <path d="M16 2v4"/>
+                    <path d="M8 2v4"/>
+                    <path d="M3 10h18"/>
+                    <path d="m9 15 2 2 4-4"/>
+                </svg>
+                Meetings
+            </a>
+
+            <a href="{% url 'student_dashboard' %}#recent-notifications" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                    <path d="M10 21h4"/>
+                </svg>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'student_logout' %}" class="menu-item logout">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <path d="M16 17l5-5-5-5"/>
+                    <path d="M21 12H9"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div>
+                <h2>My Project Group</h2>
+                <p>View and manage your project group details</p>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">
+                        {{ request.user.first_name|first|upper }}
+                    </div>
+                    <div>
+                        <h4>{{ request.user.get_full_name }}</h4>
+                        <p>Student</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <section class="page-content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>My Project Group</h1>
+                    <p>Manage your FYP team and view group information.</p>
+                </div>
+
+                <a href="{% url 'create_new_group' %}" class="create-button">
+                    + Create New Group
+                </a>
+            </div>
+
+            <!-- DATABASE GROUP RECORDS -->
+
+            {% if groups %}
+
+                {% for group in groups %}
+
+                    <!-- GROUP INFORMATION -->
+                    <section class="content-card">
+
+                        <div class="card-heading">
+                            <h3>Group Information</h3>
+
+                            <span class="status-badge">
+                                {{ group.get_status_display }}
+                            </span>
+                        </div>
+
+                        <div class="group-info-grid">
+
+                            <div class="info-item">
+                                <span>GROUP NAME</span>
+                                <h4>{{ group.group_name }}</h4>
+                            </div>
+
+                            <div class="info-item">
+                                <span>PROJECT TITLE</span>
+                                <h4>{{ group.project_title }}</h4>
+                            </div>
+
+                            <div class="info-item">
+                                <span>GROUP MEMBERS</span>
+                                <h4>{{ group.members.count }} Members</h4>
+                            </div>
+
+                            <div class="info-item">
+                                <span>SUPERVISOR</span>
+                                <h4>
+                                    {% if group.supervisor %}
+                                        {{ group.supervisor.get_full_name }}
+                                    {% else %}
+                                        Not Assigned Yet
+                                    {% endif %}
+                                </h4>
+                            </div>
+
+                        </div>
+
+                        <div class="group-description">
+                            <span>GROUP DESCRIPTION</span>
+                            <p>{{ group.description|default:"No description provided." }}</p>
+                        </div>
+
+                    </section>
+
+                    <!-- GROUP MEMBERS -->
+                    <section class="content-card">
+
+                        <div class="card-heading">
+                            <div>
+                                <h3>Group Members</h3>
+                                <p>Students currently included in this project group.</p>
+                            </div>
+
+                            <span class="member-count">
+                                {{ group.members.count }} Members
+                            </span>
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>NAME</th>
+                                        <th>SAP ID</th>
+                                        <th>ROLE</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {% for member in group.members.all %}
+
+                                        <tr>
+                                            <td>
+                                                <div class="member-name">
+
+                                                    <span class="member-avatar">
+                                                        {{ member.student.user.first_name|first|upper }}{{ member.student.user.last_name|first|upper }}
+                                                    </span>
+
+                                                    {{ member.student.user.get_full_name }}
+
+                                                </div>
+                                            </td>
+
+                                            <td>{{ member.student.sap_id }}</td>
+
+                                            <td>
+                                                {% if member.role == 'leader' %}
+                                                    <span class="role-tag leader">
+                                                        {{ member.get_role_display }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="role-tag">
+                                                        {{ member.get_role_display }}
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+
+                                    {% empty %}
+
+                                        <tr>
+                                            <td colspan="3">
+                                                No group members found.
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </section>
+
+                    <!-- RECENT ACTIVITY -->
+                    <section class="content-card">
+
+                        <div class="card-heading">
+                            <h3>Recent Activities</h3>
+                        </div>
+
+                        <div class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div>
+                                <h4>Project group created</h4>
+                                <p>Your project group was saved successfully.</p>
+
+                                <small>
+                                    {{ group.created_at|date:"d M Y, h:i A" }}
+                                </small>
+                            </div>
+                        </div>
+
+                    </section>
+
+                {% endfor %}
+
+            {% else %}
+
+                <!-- NO GROUP FOUND -->
+                <section class="content-card">
+
+                    <div class="card-heading">
+                        <h3>No Project Group Found</h3>
+                    </div>
+
+                    <div class="group-description">
+                        <p>
+                            You have not created or joined any project group yet.
+                            Create a new group to get started with your FYP.
+                        </p>
+
+                        <br>
+
+                        <a href="{% url 'create_new_group' %}" class="create-button">
+                            + Create Your First Group
+                        </a>
+                    </div>
+
+                </section>
+
+            {% endif %}
+
+        </section>
+    </main>
+</div>
+
+</body>
+</html>

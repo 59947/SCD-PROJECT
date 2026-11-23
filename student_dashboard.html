@@ -1,0 +1,964 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | FYP Management System</title>
+    <link rel="stylesheet" href="{% static 'students/css/student-dashboard.css' %}">
+
+    <style>
+        .profile-wrapper {
+            position: relative;
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+        }
+
+        .profile-trigger:focus-visible {
+            outline: 2px solid #d5ad54;
+            outline-offset: 3px;
+            border-radius: 8px;
+        }
+
+        .profile-trigger .profile-info h4,
+        .profile-trigger .profile-info p {
+            margin: 0;
+        }
+
+        .profile-arrow {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-trigger[aria-expanded="true"] .profile-arrow {
+            transform: rotate(180deg);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 220px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.13);
+            padding: 8px;
+            z-index: 1000;
+        }
+
+        .profile-dropdown[hidden] {
+            display: none;
+        }
+
+        .profile-dropdown-header {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eeeeee;
+            margin-bottom: 6px;
+        }
+
+        .profile-dropdown-header h4 {
+            color: #10294b;
+            font-size: 14px;
+            margin: 0 0 4px;
+        }
+
+        .profile-dropdown-header p {
+            color: #777777;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 7px;
+            color: #334155;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background 0.2s ease;
+        }
+
+        .profile-dropdown a:hover {
+            background: #f1f4f8;
+            color: #10294b;
+        }
+
+        .profile-dropdown a svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .profile-dropdown .profile-logout {
+            color: #c0392b;
+            border-top: 1px solid #eeeeee;
+            margin-top: 6px;
+            padding-top: 13px;
+        }
+
+        .profile-dropdown .profile-logout:hover {
+            background: #fff1f0;
+        }
+
+        /* DATABASE NOTIFICATIONS */
+
+        .notification-count[hidden] {
+            display: none !important;
+        }
+
+        .notification-item,
+        .recent-notification {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 13px;
+            border-bottom: 1px solid #eeeeee;
+            transition: background 0.2s ease;
+        }
+
+        .notification-item:hover,
+        .recent-notification:hover {
+            background: #f7f9fc;
+        }
+
+        .notification-item.unread,
+        .recent-notification.unread {
+            background: #f3f7fc;
+        }
+
+        .notification-item.read,
+        .recent-notification.read {
+            opacity: 0.8;
+        }
+
+        .notification-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-text h4,
+        .recent-notification-content h4 {
+            margin: 0 0 5px;
+        }
+
+        .notification-text p,
+        .recent-notification-content p {
+            margin: 0 0 6px;
+        }
+
+        .notification-time {
+            display: block;
+            font-size: 11px;
+            color: #888888;
+        }
+
+        .notification-empty,
+        .recent-empty {
+            padding: 25px 15px;
+            text-align: center;
+            color: #777777;
+            font-size: 13px;
+        }
+
+        .notification-empty p,
+        .recent-empty p {
+            margin: 0;
+        }
+
+        .notification-dropdown-footer a {
+            text-decoration: none;
+        }
+
+        .notification-read-status {
+            flex-shrink: 0;
+        }
+
+        .notification-read-status.unread-dot {
+            width: 8px;
+            height: 8px;
+            background: #d5ad54;
+            border-radius: 50%;
+            margin-top: 7px;
+        }
+
+        .notification-action-form {
+            margin: 0;
+        }
+
+        .mark-all-button {
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .notification-item:focus-visible,
+        .recent-notification:focus-visible {
+            outline: 2px solid #d5ad54;
+            outline-offset: -2px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">R</div>
+            <div>
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT SYSTEM</p>
+            </div>
+        </div>
+
+        <div class="sidebar-heading">MAIN MENU</div>
+
+        <nav class="sidebar-menu">
+
+            <!-- Dashboard -->
+            <a href="{% url 'student_dashboard' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="8" height="8" rx="1"/>
+                        <rect x="13" y="3" width="8" height="5" rx="1"/>
+                        <rect x="13" y="10" width="8" height="11" rx="1"/>
+                        <rect x="3" y="13" width="8" height="8" rx="1"/>
+                    </svg>
+                </span>
+                Dashboard
+            </a>
+
+            <!-- Project Group -->
+            <a href="{% url 'my_project_group' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'my_project_group' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </span>
+                Project Group
+            </a>
+
+            <!-- Proposal Submission -->
+            <a href="{% url 'proposal_submission' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'proposal_submission' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <path d="M14 2v6h6M8 13h8M8 17h8"/>
+                    </svg>
+                </span>
+                Proposal Submission
+            </a>
+
+            <!-- Proposal Status -->
+            <a href="{% url 'proposal_status' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'proposal_status' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18"/>
+                        <path d="m19 9-5 5-4-4-5 5"/>
+                        <path d="M15 9h4v4"/>
+                    </svg>
+                </span>
+                Proposal Status
+            </a>
+
+            <!-- Progress Updates -->
+            <a href="{% url 'progress_updates' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'progress_updates' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18"/>
+                        <path d="m7 14 4-4 4 3 5-7"/>
+                    </svg>
+                </span>
+                Progress Updates
+            </a>
+
+            <!-- Document Submission -->
+            <a href="{% url 'document_submission' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'document_submission' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h6l2 2h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+                    </svg>
+                </span>
+                Document Submission
+            </a>
+
+            <!-- Supervisor Feedback -->
+            <a href="{% url 'supervisor_feedback' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'supervisor_feedback' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>
+                    </svg>
+                </span>
+                Supervisor Feedback
+            </a>
+
+            <!-- Meetings -->
+            <a href="{% url 'meetings' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'meetings' %}active{% endif %}">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="17" rx="2"/>
+                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                    </svg>
+                </span>
+                Meetings
+            </a>
+
+            <!-- Notifications -->
+            <a href="#recent-notifications" class="menu-item">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                        <path d="M10 21h4"/>
+                    </svg>
+                </span>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'student_logout' %}" class="menu-item logout">
+                <span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <path d="M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                </span>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP HEADER -->
+        <header class="topbar">
+
+            <div>
+                <h2>Student Dashboard</h2>
+                <p>Welcome to your FYP workspace</p>
+            </div>
+
+            <div class="topbar-right">
+
+                <!-- NOTIFICATIONS -->
+                <div class="notification-wrapper">
+
+                    <button type="button"
+                            class="notification-button"
+                            id="notificationButton"
+                            aria-label="Open notifications"
+                            aria-controls="notificationDropdown"
+                            aria-expanded="false">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                            <path d="M10 21h4"/>
+                        </svg>
+
+                        <span class="notification-count"
+                              id="notificationCount"
+                              {% if unread_count == 0 %}hidden{% endif %}>
+                            {{ unread_count }}
+                        </span>
+                    </button>
+
+                    <div class="notification-dropdown"
+                         id="notificationDropdown"
+                         hidden>
+
+                        <div class="notification-dropdown-header">
+                            <h3>Notifications</h3>
+
+                            <form method="POST"
+                                  action="{% url 'mark_all_notifications_read' %}"
+                                  class="notification-action-form">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="mark-all-button"
+                                        id="markAllReadButton"
+                                        {% if unread_count == 0 %}disabled{% endif %}>
+                                    Mark all as read
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="notification-list">
+
+                            {% for notification in notifications %}
+
+                                <a href="{% url 'notification_read' notification.id %}"
+                                   class="notification-item {% if not notification.is_read %}unread{% else %}read{% endif %}">
+
+                                    <div class="notification-symbol">
+
+                                        <svg viewBox="0 0 24 24">
+
+                                            {% if notification.notification_type == 'proposal' %}
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                <path d="M14 2v6h6M8 13h8M8 17h8"/>
+
+                                            {% elif notification.notification_type == 'document' %}
+                                                <path d="M4 4h6l2 2h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+
+                                            {% elif notification.notification_type == 'meeting' %}
+                                                <rect x="3" y="4" width="18" height="17" rx="2"/>
+                                                <path d="M16 2v4M8 2v4M3 10h18"/>
+
+                                            {% elif notification.notification_type == 'feedback' %}
+                                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>
+
+                                            {% elif notification.notification_type == 'progress' %}
+                                                <path d="M3 3v18h18"/>
+                                                <path d="m7 14 4-4 4 3 5-7"/>
+
+                                            {% else %}
+                                                <circle cx="12" cy="12" r="9"/>
+                                                <path d="M12 11v5M12 7h.01"/>
+                                            {% endif %}
+
+                                        </svg>
+
+                                    </div>
+
+                                    <div class="notification-text">
+                                        <h4>{{ notification.title }}</h4>
+                                        <p>{{ notification.message }}</p>
+                                        <span class="notification-time">
+                                            {{ notification.created_at|date:"d M Y, h:i A" }}
+                                        </span>
+                                    </div>
+
+                                </a>
+
+                            {% empty %}
+
+                                <div class="notification-empty">
+                                    <p>No notifications available.</p>
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="notification-dropdown-footer">
+                            <a href="#recent-notifications" id="viewAllNotifications">
+                                View All Notifications
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- STUDENT PROFILE DROPDOWN -->
+                <div class="profile-wrapper">
+
+                    <button type="button"
+                            class="profile-trigger"
+                            id="profileButton"
+                            aria-label="Open student profile menu"
+                            aria-controls="profileDropdown"
+                            aria-expanded="false">
+
+                        <div class="profile-avatar">
+                            {{ request.user.first_name|first|upper|default:"S" }}
+                        </div>
+
+                        <div class="profile-info">
+                            <h4>
+                                {{ request.user.get_full_name|default:request.user.username }}
+                            </h4>
+                            <p>Student</p>
+                        </div>
+
+                        <svg class="profile-arrow"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path d="m6 9 6 6 6-6"/>
+                        </svg>
+
+                    </button>
+
+                    <div class="profile-dropdown"
+                         id="profileDropdown"
+                         hidden>
+
+                        <div class="profile-dropdown-header">
+                            <h4>
+                                {{ request.user.get_full_name|default:request.user.username }}
+                            </h4>
+                            <p>Student Account</p>
+                        </div>
+
+                        <a href="{% url 'my_profile' %}" class="profile-menu-link">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+                            </svg>
+                            My Profile
+                        </a>
+
+                        <a href="{% url 'edit_profile' %}" class="profile-menu-link">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 20h9"/>
+                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+                            </svg>
+                            Edit Profile
+                        </a>
+
+                        <a href="{% url 'change_password' %}" class="profile-menu-link">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Change Password
+                        </a>
+
+                        <a href="{% url 'student_logout' %}" class="profile-logout">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                <path d="m16 17 5-5-5-5M21 12H9"/>
+                            </svg>
+                            Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </header>
+
+
+        <!-- DASHBOARD BODY -->
+        <section class="dashboard-body">
+
+            <div class="welcome-section">
+                <div>
+                    <h1>
+                        Welcome Back,
+                        {{ request.user.first_name|default:"Student" }}!
+                    </h1>
+                    <p>Manage your final year project activities from one place.</p>
+                </div>
+
+                <div class="welcome-date">STUDENT PORTAL</div>
+            </div>
+
+
+            <!-- OVERVIEW CARDS -->
+            <div class="overview-grid">
+
+                <div class="overview-card">
+                    <div class="card-icon blue">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p>Project Group</p>
+                        <h2>Not Created</h2>
+                    </div>
+                </div>
+
+                <div class="overview-card">
+                    <div class="card-icon gold">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <path d="M14 2v6h6M8 13h8M8 17h8"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p>Proposal Status</p>
+                        <h2>Not Submitted</h2>
+                    </div>
+                </div>
+
+                <div class="overview-card">
+                    <div class="card-icon green">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 3v18h18"/>
+                            <path d="m7 14 4-4 4 3 5-7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p>Project Progress</p>
+                        <h2>0%</h2>
+                    </div>
+                </div>
+
+                <div class="overview-card">
+                    <div class="card-icon purple">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="17" rx="2"/>
+                            <path d="M16 2v4M8 2v4M3 10h18"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p>Upcoming Meetings</p>
+                        <h2>0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- CONTENT GRID -->
+            <div class="content-grid">
+
+                <!-- MY PROJECT -->
+                <div class="dashboard-panel project-panel">
+
+                    <div class="panel-heading">
+                        <h3>My Project</h3>
+                        <span class="status-badge">Not Started</span>
+                    </div>
+
+                    <div class="empty-project">
+
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h6l2 2h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+                            </svg>
+                        </div>
+
+                        <h3>No Project Assigned Yet</h3>
+
+                        <p>
+                            Create or join a project group to begin your final year project journey.
+                        </p>
+
+                        <a href="{% url 'my_project_group' %}" class="primary-button">
+                            Create Project Group
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- PROJECT JOURNEY -->
+                <div class="dashboard-panel progress-panel">
+
+                    <div class="panel-heading">
+                        <h3>Project Journey</h3>
+                    </div>
+
+                    <div class="journey-step current">
+                        <div class="step-circle">1</div>
+                        <div>
+                            <h4>Project Group</h4>
+                            <p>Create or join a group</p>
+                        </div>
+                    </div>
+
+                    <div class="journey-step">
+                        <div class="step-circle">2</div>
+                        <div>
+                            <h4>Proposal Submission</h4>
+                            <p>Submit your project proposal</p>
+                        </div>
+                    </div>
+
+                    <div class="journey-step">
+                        <div class="step-circle">3</div>
+                        <div>
+                            <h4>Supervisor Assignment</h4>
+                            <p>Get your supervisor assigned</p>
+                        </div>
+                    </div>
+
+                    <div class="journey-step">
+                        <div class="step-circle">4</div>
+                        <div>
+                            <h4>Project Development</h4>
+                            <p>Complete project milestones</p>
+                        </div>
+                    </div>
+
+                    <div class="journey-step">
+                        <div class="step-circle">5</div>
+                        <div>
+                            <h4>Final Evaluation</h4>
+                            <p>Present your completed project</p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- UPCOMING DEADLINES -->
+                <div class="dashboard-panel">
+
+                    <div class="panel-heading">
+                        <h3>Upcoming Deadlines</h3>
+                    </div>
+
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="17" rx="2"/>
+                                <path d="M16 2v4M8 2v4M3 10h18"/>
+                            </svg>
+                        </div>
+
+                        <p>No upcoming deadlines</p>
+                    </div>
+
+                </div>
+
+
+                <!-- RECENT NOTIFICATIONS -->
+                <div class="dashboard-panel" id="recent-notifications">
+
+                    <div class="panel-heading">
+                        <h3>Recent Notifications</h3>
+                        <span>{{ unread_count }} Unread</span>
+                    </div>
+
+                    <div class="recent-notification-list">
+
+                        {% for notification in notifications %}
+
+                            <a href="{% url 'notification_read' notification.id %}"
+                               class="recent-notification {% if not notification.is_read %}unread{% else %}read{% endif %}">
+
+                                <div class="recent-notification-icon">
+
+                                    <svg viewBox="0 0 24 24">
+
+                                        {% if notification.notification_type == 'proposal' %}
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <path d="M14 2v6h6"/>
+
+                                        {% elif notification.notification_type == 'document' %}
+                                            <path d="M4 4h6l2 2h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+
+                                        {% elif notification.notification_type == 'meeting' %}
+                                            <rect x="3" y="4" width="18" height="17" rx="2"/>
+                                            <path d="M16 2v4M8 2v4M3 10h18"/>
+
+                                        {% elif notification.notification_type == 'feedback' %}
+                                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>
+
+                                        {% elif notification.notification_type == 'progress' %}
+                                            <path d="M3 3v18h18"/>
+                                            <path d="m7 14 4-4 4 3 5-7"/>
+
+                                        {% else %}
+                                            <circle cx="12" cy="12" r="9"/>
+                                            <path d="M12 11v5M12 7h.01"/>
+                                        {% endif %}
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="recent-notification-content">
+                                    <h4>{{ notification.title }}</h4>
+                                    <p>{{ notification.message }}</p>
+                                    <small>
+                                        {{ notification.created_at|date:"d M Y, h:i A" }}
+                                    </small>
+                                </div>
+
+                                <span class="notification-read-status {% if not notification.is_read %}unread-dot{% endif %}"></span>
+
+                            </a>
+
+                        {% empty %}
+
+                            <div class="recent-empty">
+                                <p>You do not have any notifications yet.</p>
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- NOTIFICATION AND PROFILE JAVASCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const notificationButton =
+        document.getElementById("notificationButton");
+
+    const notificationDropdown =
+        document.getElementById("notificationDropdown");
+
+    const profileButton =
+        document.getElementById("profileButton");
+
+    const profileDropdown =
+        document.getElementById("profileDropdown");
+
+    const viewAllNotifications =
+        document.getElementById("viewAllNotifications");
+
+
+    // OPEN/CLOSE NOTIFICATION DROPDOWN
+    notificationButton.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+
+        const isOpening = notificationDropdown.hidden;
+
+        notificationDropdown.hidden = !isOpening;
+
+        notificationButton.setAttribute(
+            "aria-expanded",
+            String(isOpening)
+        );
+
+        if (isOpening) {
+            closeProfileDropdown();
+        }
+
+    });
+
+
+    // OPEN/CLOSE PROFILE DROPDOWN
+    profileButton.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+
+        const isOpening = profileDropdown.hidden;
+
+        profileDropdown.hidden = !isOpening;
+
+        profileButton.setAttribute(
+            "aria-expanded",
+            String(isOpening)
+        );
+
+        if (isOpening) {
+            closeNotificationDropdown();
+        }
+
+    });
+
+
+    function closeNotificationDropdown() {
+
+        notificationDropdown.hidden = true;
+
+        notificationButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+
+    function closeProfileDropdown() {
+
+        profileDropdown.hidden = true;
+
+        profileButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+
+    // CLOSE MENUS WHEN CLICKING OUTSIDE
+    document.addEventListener("click", function (event) {
+
+        if (
+            !notificationDropdown.contains(event.target) &&
+            !notificationButton.contains(event.target)
+        ) {
+            closeNotificationDropdown();
+        }
+
+        if (
+            !profileDropdown.contains(event.target) &&
+            !profileButton.contains(event.target)
+        ) {
+            closeProfileDropdown();
+        }
+
+    });
+
+
+    // CLOSE MENUS USING ESCAPE KEY
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closeNotificationDropdown();
+            closeProfileDropdown();
+        }
+
+    });
+
+
+    // VIEW ALL NOTIFICATIONS
+    if (viewAllNotifications) {
+
+        viewAllNotifications.addEventListener("click", function () {
+            closeNotificationDropdown();
+        });
+
+    }
+
+});
+</script>
+
+</body>
+</html>

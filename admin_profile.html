@@ -1,0 +1,64 @@
+
+{% extends "admins/base.html" %}
+
+{% block content %}
+<div class="admin-account-page">
+    <div class="account-heading">
+        <div>
+            <h1>My Profile</h1>
+            <p>View your administrator account information.</p>
+        </div>
+        <a class="account-button" href="{% url 'admins:edit_admin_profile' %}">Edit Profile</a>
+    </div>
+
+    <section class="account-card">
+        <div class="account-avatar">
+            {{ admin.name|first|upper }}
+        </div>
+        <h2>{{ admin.name }}</h2>
+        <p class="account-role">System Administrator</p>
+
+        <div class="account-details">
+            <div>
+                <span>Full Name</span>
+                <strong>{{ admin.name }}</strong>
+            </div>
+            <div>
+                <span>Email Address</span>
+                <strong>{{ admin.email }}</strong>
+            </div>
+            <div>
+                <span>Account Role</span>
+                <strong>Administrator</strong>
+            </div>
+        </div>
+
+        <a class="account-secondary-button"
+           href="{% url 'admins:change_admin_password' %}">
+            Change Password
+        </a>
+    </section>
+</div>
+
+<style>
+.admin-account-page { color:#263449; }
+.account-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:24px; }
+.account-heading h1 { margin:0 0 6px; font-size:25px; }
+.account-heading p { margin:0; color:#718096; }
+.account-card { background:#fff; border:1px solid #e5eaf1; border-radius:12px; padding:30px; max-width:760px; }
+.account-avatar { width:66px; height:66px; border-radius:50%; display:grid; place-items:center; background:#102747; color:#fff; font-size:26px; font-weight:700; }
+.account-card h2 { margin:16px 0 4px; }
+.account-role { color:#718096; margin:0 0 25px; }
+.account-details { border-top:1px solid #e9edf2; }
+.account-details div { display:flex; justify-content:space-between; gap:20px; padding:17px 0; border-bottom:1px solid #e9edf2; }
+.account-details span { color:#718096; }
+.account-details strong { overflow-wrap:anywhere; text-align:right; }
+.account-button,.account-secondary-button { display:inline-block; text-decoration:none; padding:11px 18px; border-radius:7px; background:#102747; color:#fff; font-weight:600; }
+.account-secondary-button { margin-top:24px; background:#d5ad54; color:#102747; }
+@media(max-width:600px) {
+    .account-heading { align-items:flex-start; flex-direction:column; }
+    .account-details div { flex-direction:column; gap:5px; }
+    .account-details strong { text-align:left; }
+}
+</style>
+{% endblock %}

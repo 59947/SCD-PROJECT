@@ -1,0 +1,566 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Updates | Riphah FYP Management System</title>
+
+    <link rel="stylesheet" href="{% static 'students/css/progress-updates.css' %}">
+
+    <style>
+        .sidebar {
+            width:248px!important; min-width:248px!important;
+            max-width:248px!important; flex:0 0 248px!important;
+            background:#112b4c!important; color:#fff!important;
+            padding:13px!important; box-sizing:border-box!important;
+        }
+        .sidebar .brand {
+            display:flex!important; align-items:center!important;
+            gap:12px!important; padding:12px 10px 29px!important;
+            margin-bottom:18px!important;
+            border-bottom:1px solid rgba(255,255,255,.13)!important;
+        }
+        .sidebar .brand-logo {
+            width:42px!important; height:42px!important; min-width:42px!important;
+            background:#d9ad4c!important; color:#10294b!important;
+            border-radius:11px!important; display:flex!important;
+            justify-content:center!important; align-items:center!important;
+            font-size:22px!important; font-weight:800!important;
+        }
+        .sidebar .brand-text h2 {
+            color:#fff!important; font-size:18px!important;
+            font-weight:700!important; line-height:1.2!important;
+            margin:0!important;
+        }
+        .sidebar .brand-text p {
+            color:#d5ad54!important; font-size:9px!important;
+            letter-spacing:.6px!important; margin-top:5px!important;
+        }
+        .sidebar .sidebar-heading {
+            color:#aebed2!important; font-size:10px!important;
+            font-weight:700!important; letter-spacing:1px!important;
+            padding:10px 12px!important;
+        }
+        .sidebar .sidebar-menu {
+            display:flex!important; flex-direction:column!important; gap:3px!important;
+        }
+        .sidebar .menu-item {
+            min-height:46px!important; height:46px!important;
+            display:flex!important; align-items:center!important;
+            gap:13px!important; padding:0 12px!important;
+            border-radius:7px!important; border-left:3px solid transparent!important;
+            color:#e8eef7!important; text-decoration:none!important;
+            font-size:14px!important; font-weight:600!important;
+            box-sizing:border-box!important;
+        }
+        .sidebar .menu-item svg {
+            width:20px!important; height:20px!important; min-width:20px!important;
+            stroke:#dce6f2!important; fill:none!important; stroke-width:1.7!important;
+            stroke-linecap:round!important; stroke-linejoin:round!important;
+        }
+        .sidebar .menu-item:hover {
+            background:rgba(255,255,255,.10)!important; color:#eebd4f!important;
+        }
+        .sidebar .menu-item:hover svg { stroke:#eebd4f!important; }
+        .sidebar .menu-item.active {
+            background:#30465e!important; color:#eebd4f!important;
+            border-left:3px solid #eebd4f!important;
+        }
+        .sidebar .menu-item.active svg { stroke:#eebd4f!important; }
+        .sidebar .sidebar-bottom {
+            margin-top:auto!important; padding-top:15px!important;
+            border-top:1px solid rgba(255,255,255,.13)!important;
+        }
+        .sidebar .logout { color:#e8eef7!important; }
+        .sidebar a, .sidebar a:visited { font-family:Arial,sans-serif!important; }
+        .message-box {
+            padding:12px 16px; margin-bottom:18px; border-radius:7px;
+            background:#edf7ef; color:#236337; border:1px solid #c8e6ce;
+        }
+        .message-box.error { background:#fff0f0; color:#a32626; border-color:#f0caca; }
+        .empty-history {
+            padding:25px; text-align:center; color:#68778a;
+        }
+        .attachment-link { color:#173f70; font-weight:600; text-decoration:none; }
+        @media(max-width:768px) {
+            .sidebar { width:248px!important; min-width:248px!important; flex-basis:248px!important; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">R</div>
+            <div class="brand-text">
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT SYSTEM</p>
+            </div>
+        </div>
+
+        <div class="sidebar-heading">MAIN MENU</div>
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'student_dashboard' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="8" height="8" rx="1"/>
+                    <rect x="13" y="3" width="8" height="5" rx="1"/>
+                    <rect x="13" y="10" width="8" height="11" rx="1"/>
+                    <rect x="3" y="13" width="8" height="8" rx="1"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="{% url 'my_project_group' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'my_project_group' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3"/>
+                    <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+                    <path d="M16 5.5a3 3 0 0 1 0 5.8"/>
+                    <path d="M18 14c1.8.8 3 2.5 3 4.5"/>
+                </svg>
+                Project Group
+            </a>
+
+            <a href="{% url 'proposal_submission' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'proposal_submission' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6M8 13h8M8 17h8"/>
+                </svg>
+                Proposal Submission
+            </a>
+
+            <a href="{% url 'proposal_status' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'proposal_status' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 3v18h18M7 14l4-4 4 3 6-7"/>
+                </svg>
+                Proposal Status
+            </a>
+
+            <a href="{% url 'progress_updates' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'progress_updates' %}active{% endif %}"
+               aria-current="page">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 3v18h18M7 14l4-4 4 3 6-7M7 7h4"/>
+                </svg>
+                Progress Updates
+            </a>
+
+            <a href="{% url 'document_submission' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'document_submission' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                </svg>
+                Document Submission
+            </a>
+
+            <a href="{% url 'supervisor_feedback' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'supervisor_feedback' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>
+                </svg>
+                Supervisor Feedback
+            </a>
+
+            <a href="{% url 'meetings' %}"
+               class="menu-item {% if request.resolver_match.url_name == 'meetings' %}active{% endif %}">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="17" rx="2"/>
+                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                </svg>
+                Meetings
+            </a>
+
+            <a href="#" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                    <path d="M10 21h4"/>
+                </svg>
+                Notifications
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'student_logout' %}" class="menu-item logout">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <path d="M16 17l5-5-5-5M21 12H9"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <h3>Progress Updates</h3>
+                <p>Track and report your FYP development progress</p>
+            </div>
+
+            <div class="topbar-right">
+                <button class="notification-button" type="button" aria-label="Notifications">
+                    ♧
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="profile">
+                    <div class="profile-avatar">S</div>
+                    <div class="profile-info">
+                        <h4>{{ request.user.get_full_name|default:request.user.email }}</h4>
+                        <p>Student</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="page-content">
+
+            <div class="page-heading">
+                <div>
+                    <span class="page-label">FYP MANAGEMENT</span>
+                    <h1>Progress Updates</h1>
+                    <p>Keep your supervisor informed about your project's development and completed work.</p>
+                </div>
+            </div>
+
+            <!-- DJANGO MESSAGES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message-box {% if message.tags == 'error' %}error{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- PROJECT OVERVIEW -->
+            <div class="content-card project-overview-card">
+                <div class="card-heading">
+                    <div>
+                        <h2>Project Overview</h2>
+                        <p>Your current FYP project information</p>
+                    </div>
+                    <span class="project-status">In Progress</span>
+                </div>
+
+                {% if project_group %}
+                    <div class="project-overview-details">
+                        <div class="overview-item">
+                            <label>Project Title</label>
+                            <h3>
+                                {% if project_group.project_title %}
+                                    {{ project_group.project_title }}
+                                {% else %}
+                                    Not Added
+                                {% endif %}
+                            </h3>
+                        </div>
+
+                        <div class="overview-item">
+                            <label>Group Name</label>
+                            <h3>{{ project_group.group_name }}</h3>
+                        </div>
+
+                        <div class="overview-item">
+                            <label>Supervisor</label>
+                            <h3>
+                                {% if project_group.supervisor %}
+                                    {{ project_group.supervisor.get_full_name|default:project_group.supervisor.email }}
+                                {% else %}
+                                    Not Assigned
+                                {% endif %}
+                            </h3>
+                        </div>
+
+                        <div class="overview-item">
+                            <label>Project Start Date</label>
+                            <h3>{{ project_group.created_at|date:"d M Y" }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="overall-progress">
+                        <div class="progress-heading">
+                            <h4>Latest Reported Progress</h4>
+                            <span>
+                                {% if progress_updates %}
+                                    {{ progress_updates.0.progress_percentage }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-fill"
+                                 style="width:{% if progress_updates %}{{ progress_updates.0.progress_percentage }}{% else %}0{% endif %}%;">
+                            </div>
+                        </div>
+
+                        <p>Progress is based on your latest submitted update.</p>
+                    </div>
+                {% else %}
+                    <div class="empty-history">
+                        <p>You are not currently connected to a project group.</p>
+                        <a href="{% url 'my_project_group' %}">View Project Group</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- PROJECT MILESTONES -->
+            <div class="content-card milestones-card">
+                <div class="card-heading">
+                    <div>
+                        <h2>Project Milestones</h2>
+                        <p>Track the completion of important project stages</p>
+                    </div>
+                </div>
+
+                <div class="milestone-list">
+
+                    <div class="milestone-item">
+                        <div class="milestone-number completed">✓</div>
+                        <div class="milestone-info">
+                            <h4>Topic Selection</h4>
+                            <p>Project topic selected and finalized</p>
+                        </div>
+                        <span class="milestone-status completed-status">Completed</span>
+                    </div>
+
+                    <div class="milestone-item">
+                        <div class="milestone-number completed">✓</div>
+                        <div class="milestone-info">
+                            <h4>Proposal Submission</h4>
+                            <p>FYP proposal prepared and submitted</p>
+                        </div>
+                        <span class="milestone-status completed-status">Completed</span>
+                    </div>
+
+                    <div class="milestone-item">
+                        <div class="milestone-number current">3</div>
+                        <div class="milestone-info">
+                            <h4>Requirement Analysis</h4>
+                            <p>Identifying and documenting system requirements</p>
+                        </div>
+                        <span class="milestone-status current-status">In Progress</span>
+                    </div>
+
+                    <div class="milestone-item">
+                        <div class="milestone-number pending">4</div>
+                        <div class="milestone-info">
+                            <h4>System Design</h4>
+                            <p>Preparing system architecture and UML diagrams</p>
+                        </div>
+                        <span class="milestone-status pending-status">Pending</span>
+                    </div>
+
+                    <div class="milestone-item">
+                        <div class="milestone-number pending">5</div>
+                        <div class="milestone-info">
+                            <h4>Development</h4>
+                            <p>Implementing the proposed system</p>
+                        </div>
+                        <span class="milestone-status pending-status">Pending</span>
+                    </div>
+
+                    <div class="milestone-item">
+                        <div class="milestone-number pending">6</div>
+                        <div class="milestone-info">
+                            <h4>Testing and Final Evaluation</h4>
+                            <p>Testing the system and preparing final deliverables</p>
+                        </div>
+                        <span class="milestone-status pending-status">Pending</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SUBMIT NEW PROGRESS UPDATE -->
+            <div class="content-card update-form-card">
+                <div class="card-heading">
+                    <div>
+                        <h2>Submit New Progress Update</h2>
+                        <p>Describe the work completed during this reporting period.</p>
+                    </div>
+                    <span class="form-label">NEW UPDATE</span>
+                </div>
+
+                {% if project_group %}
+                    <form class="progress-form"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="title">Update Title</label>
+                            <input type="text"
+                                   id="title"
+                                   name="title"
+                                   placeholder="e.g. Completed Requirement Analysis"
+                                   maxlength="200"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Progress Description</label>
+                            <textarea id="description"
+                                      name="description"
+                                      rows="4"
+                                      placeholder="Describe the progress made on your project..."
+                                      required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="completed_tasks">Work Completed</label>
+                            <textarea id="completed_tasks"
+                                      name="completed_tasks"
+                                      rows="4"
+                                      placeholder="List the tasks and activities you completed..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="challenges">Challenges Faced</label>
+                            <textarea id="challenges"
+                                      name="challenges"
+                                      rows="3"
+                                      placeholder="Mention any difficulties or problems faced..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="next_steps">Next Steps</label>
+                            <textarea id="next_steps"
+                                      name="next_steps"
+                                      rows="3"
+                                      placeholder="Describe what you plan to work on next..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="progress_percentage">Overall Progress Percentage</label>
+                            <input type="number"
+                                   id="progress_percentage"
+                                   name="progress_percentage"
+                                   min="0"
+                                   max="100"
+                                   value="0"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="attachment">Attach Supporting File (Optional)</label>
+                            <input type="file"
+                                   id="attachment"
+                                   name="attachment"
+                                   accept=".pdf,.doc,.docx">
+                            <small>Allowed formats: PDF, DOC, DOCX. Maximum size: 10 MB.</small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="reset" class="reset-button">Clear Form</button>
+                            <button type="submit" class="submit-button">Submit Progress Update</button>
+                        </div>
+
+                    </form>
+                {% else %}
+                    <div class="empty-history">
+                        <p>You must have a project group before submitting a progress update.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- PREVIOUS PROGRESS UPDATES -->
+            <div class="content-card history-card">
+                <div class="card-heading">
+                    <div>
+                        <h2>Previous Progress Updates</h2>
+                        <p>Review your previously submitted project updates</p>
+                    </div>
+                    <span class="total-updates">
+                        {{ progress_updates|length }} Updates
+                    </span>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="updates-table">
+                        <thead>
+                            <tr>
+                                <th>Update Title</th>
+                                <th>Progress</th>
+                                <th>Submission Date</th>
+                                <th>Attachment</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for update in progress_updates %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ update.title }}</strong>
+                                    </td>
+
+                                    <td>{{ update.progress_percentage }}%</td>
+
+                                    <td>{{ update.submitted_at|date:"d M Y, h:i A" }}</td>
+
+                                    <td>
+                                        {% if update.attachment %}
+                                            <a class="attachment-link"
+                                               href="{{ update.attachment.url }}"
+                                               target="_blank">
+                                                View File
+                                            </a>
+                                        {% else %}
+                                            Not Attached
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="empty-history">
+                                        You have not submitted any progress updates yet.
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SUPERVISOR REVIEW INFORMATION -->
+            <div class="content-card review-card">
+                <div class="card-heading">
+                    <div>
+                        <h2>Supervisor Review</h2>
+                        <p>Information about reviewing your submitted progress updates</p>
+                    </div>
+                    <span class="review-icon">i</span>
+                </div>
+
+                <div class="feedback-note">
+                    <div class="feedback-note-icon">i</div>
+                    <div>
+                        <h4>Need supervisor feedback?</h4>
+                        <p>
+                            You can view supervisor comments and instructions
+                            on the Supervisor Feedback page.
+                        </p>
+                        <a href="{% url 'supervisor_feedback' %}">View Supervisor Feedback</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+</div>
+</body>
+</html>

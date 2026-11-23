@@ -1,0 +1,131 @@
+{% extends "admins/base.html" %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div>
+        <h2>Allocation Details</h2>
+        <p>View the supervisor and project group assignment.</p>
+    </div>
+
+    <div class="heading-actions">
+
+        <a href="{% url 'admins:edit_allocation' allocation.id %}"
+           class="secondary-button">
+            Edit Allocation
+        </a>
+
+        <a href="{% url 'admins:manage_allocations' %}"
+           class="secondary-button">
+            Back to Allocations
+        </a>
+
+    </div>
+</div>
+
+<div class="content-card details-card">
+
+    <div class="details-header">
+        <div>
+            <h3>Supervisor Assignment</h3>
+            <p>Allocation ID: {{ allocation.id }}</p>
+        </div>
+
+        <span class="status-badge allocation-status">
+            {{ allocation.status }}
+        </span>
+    </div>
+
+    <div class="details-grid">
+
+        <div class="detail-item">
+            <span>Project Group</span>
+            <strong>
+                {% if allocation.group %}
+                    {{ allocation.group.group_name }}
+                {% else %}
+                    Group unavailable
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Group Code</span>
+            <strong>
+                {% if allocation.group %}
+                    {{ allocation.group.group_code }}
+                {% else %}
+                    —
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Project Title</span>
+            <strong>
+                {% if allocation.group %}
+                    {{ allocation.group.project_title }}
+                {% else %}
+                    —
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Supervisor Name</span>
+            <strong>
+                {% if allocation.supervisor %}
+                    {{ allocation.supervisor.name }}
+                {% else %}
+                    Supervisor unavailable
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Employee ID</span>
+            <strong>
+                {% if allocation.supervisor %}
+                    {{ allocation.supervisor.employee_id }}
+                {% else %}
+                    —
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Supervisor Email</span>
+            <strong>
+                {% if allocation.supervisor %}
+                    {{ allocation.supervisor.email }}
+                {% else %}
+                    —
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Allocation Date</span>
+            <strong>{{ allocation.allocated_date }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Allocation Status</span>
+            <strong>{{ allocation.status }}</strong>
+        </div>
+
+    </div>
+
+    <div class="proposal-abstract">
+        <h3>Allocation Notes</h3>
+
+        {% if allocation.notes %}
+            <p>{{ allocation.notes|linebreaksbr }}</p>
+        {% else %}
+            <p>No additional notes have been added.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends "admins/base.html" %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div>
+        <h2>{{ page_heading }}</h2>
+        <p>Choose a project group and assign its supervisor.</p>
+    </div>
+
+    <a href="{% url 'admins:manage_allocations' %}"
+       class="secondary-button">
+        Back to Allocations
+    </a>
+</div>
+
+<div class="content-card form-card">
+
+    {% if errors %}
+        <div class="form-errors">
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if not groups %}
+        <div class="form-errors">
+            <p>No project groups are available. Create a group before assigning a supervisor.</p>
+        </div>
+
+    {% elif not supervisors %}
+        <div class="form-errors">
+            <p>No supervisors are available. Add a supervisor before creating an allocation.</p>
+        </div>
+
+    {% else %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="group_id">Project Group *</label>
+
+                <select id="group_id" name="group_id" required>
+                    <option value="">Select Project Group</option>
+
+                    {% for group in groups %}
+                        <option
+                            value="{{ group.id }}"
+                            {% if allocation.group_id == group.id %}selected{% endif %}
+                        >
+                            {{ group.group_name }} ({{ group.group_code }})
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <small class="field-help">
+                    Each group can have only one allocated supervisor.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="supervisor_id">Supervisor *</label>
+
+                <select id="supervisor_id" name="supervisor_id" required>
+                    <option value="">Select Supervisor</option>
+
+                    {% for supervisor in supervisors %}
+                        <option
+                            value="{{ supervisor.id }}"
+                            {% if allocation.supervisor_id == supervisor.id %}selected{% endif %}
+                        >
+                            {{ supervisor.name }} ({{ supervisor.employee_id }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="allocated_date">Allocation Date *</label>
+
+                <input
+                    type="date"
+                    id="allocated_date"
+                    name="allocated_date"
+                    value="{{ allocation.allocated_date }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="status">Allocation Status *</label>
+
+                <select id="status" name="status" required>
+                    {% for status in allocation_statuses %}
+                        <option
+                            value="{{ status }}"
+                            {% if allocation.status == status %}selected{% endif %}
+                        >
+                            {{ status }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="notes">Allocation Notes</label>
+
+                <textarea
+                    id="notes"
+                    name="notes"
+                    rows="4"
+                    placeholder="Enter any additional allocation instructions or notes..."
+                >{{ allocation.notes }}</textarea>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button type="submit" class="primary-button">
+                {{ button_text }}
+            </button>
+
+            <a href="{% url 'admins:manage_allocations' %}"
+               class="secondary-button">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

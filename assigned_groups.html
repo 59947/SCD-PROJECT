@@ -1,0 +1,618 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Assigned Groups | Riphah FYP</title>
+
+    <link rel="stylesheet" href="{% static 'supervisors/css/supervisor-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'supervisors/css/assigned-groups.css' %}">
+
+    <style>
+        .database-empty {
+            text-align: center;
+            padding: 35px 15px;
+            color: #718096;
+        }
+
+        .database-empty strong {
+            display: block;
+            color: #26364a;
+            margin-bottom: 7px;
+        }
+
+        .filter-bar a.btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .group-status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: #edf2f7;
+            color: #34445a;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .progress-fill {
+            max-width: 100%;
+        }
+
+        .profile-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #10294b;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .message-container {
+            margin-bottom: 18px;
+        }
+
+        .message-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            background: #edf2f7;
+            color: #26364a;
+        }
+
+        .message-item.success {
+            background: #e6f4ea;
+            color: #216e39;
+        }
+
+        .message-item.error {
+            background: #fdecec;
+            color: #a12626;
+        }
+
+        .message-item.warning {
+            background: #fff4df;
+            color: #8a5a00;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .groups-table {
+            width: 100%;
+        }
+
+        .groups-table td,
+        .groups-table th {
+            white-space: nowrap;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            min-height: 40px;
+        }
+
+        .filter-bar form {
+            display: contents;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     style="color: white; width: 28px; height: 28px;">
+
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+
+            <div class="brand-text">
+                <h2>RIPHAH</h2>
+                <p>FYP MANAGEMENT<br>SYSTEM</p>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'supervisor_dashboard' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="{% url 'assigned_groups' %}" class="menu-item active">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                My Assigned Groups
+            </a>
+
+            <a href="{% url 'proposal_reviews' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                Proposal Reviews
+            </a>
+
+            <a href="{% url 'student_progress' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 20V10M12 20V4M6 20v-6"/>
+                </svg>
+                Student Progress
+            </a>
+
+            <a href="{% url 'document_reviews' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                    <polyline points="13 2 13 9 20 9"/>
+                </svg>
+                Document Reviews
+            </a>
+
+            <a href="{% url 'feedback' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                Feedback &amp; Comments
+            </a>
+
+            <a href="{% url 'meetings' %}" class="menu-item">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Meetings
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="/" class="menu-item logout">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="menu-toggle" type="button">
+                    <svg viewBox="0 0 24 24"
+                         width="24"
+                         height="24"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         fill="none">
+
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+
+                <div class="page-title">
+                    <h2>My Assigned Groups</h2>
+                    <p>View and manage your assigned project groups</p>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="notification-wrapper">
+                    <button class="notification-button" type="button">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                            <path d="M10 21h4"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        {{ request.user.first_name|default:"S"|first|upper }}
+                    </div>
+
+                    <div class="profile-info">
+                        <h4>
+                            {{ request.user.get_full_name|default:request.user.email }}
+                        </h4>
+                        <p>Supervisor</p>
+
+                        <svg width="12"
+                             height="12"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE BODY -->
+        <section class="dashboard-body">
+
+            <!-- DJANGO MESSAGES -->
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="message-item {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            <!-- SUMMARY CARDS -->
+            <div class="groups-summary-grid">
+
+                <div class="summary-card">
+
+                    <div class="icon-box blue">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ total_groups }}</h2>
+                        <p>Total Groups</p>
+                        <span>Groups assigned to you</span>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="icon-box green">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ total_students }}</h2>
+                        <p>Total Students</p>
+                        <span>Students under supervision</span>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="icon-box orange">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <path d="M18 20V10M12 20V4M6 20v-6"/>
+                        </svg>
+                    </div>
+
+                    <div class="card-data">
+                        <h2>{{ projects_in_progress }}</h2>
+                        <p>Approved Projects</p>
+                        <span>Groups with approved status</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH AND FILTER BAR -->
+            <form method="GET" class="filter-bar">
+
+                <div class="search-box">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="#8794a5"
+                         stroke-width="2">
+
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search by group name or project title..."
+                        value="{{ search_query }}"
+                    >
+
+                </div>
+
+
+                <div class="filter-group">
+
+                    <label for="status">Group Status:</label>
+
+                    <select name="status" id="status">
+
+                        <option value="">All Status</option>
+
+                        {% for value, label in status_choices %}
+                            <option
+                                value="{{ value }}"
+                                {% if selected_status == value %}selected{% endif %}
+                            >
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <button type="submit" class="btn-primary">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         width="16"
+                         height="16">
+
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                    </svg>
+
+                    Apply Filter
+
+                </button>
+
+
+                <a href="{% url 'assigned_groups' %}" class="btn-outline">
+                    Reset
+                </a>
+
+            </form>
+
+
+            <!-- GROUPS TABLE -->
+            <div class="content-card table-card">
+
+                <div class="table-responsive">
+
+                    <table class="groups-table">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Group Name</th>
+                                <th>Project Title</th>
+                                <th>Students</th>
+                                <th>Group Status</th>
+                                <th>Progress</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for row in assigned_group_rows %}
+
+                                <tr>
+
+                                    <td>{{ forloop.counter }}</td>
+
+                                    <td>
+                                        <strong>
+                                            {{ row.group.group_name }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {{ row.group.project_title|default:"Not provided" }}
+                                    </td>
+
+                                    <td>
+                                        <svg viewBox="0 0 24 24"
+                                             fill="none"
+                                             stroke="#526174"
+                                             stroke-width="2"
+                                             width="14"
+                                             height="14">
+
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="9" cy="7" r="4"/>
+                                        </svg>
+
+                                        {{ row.student_count }}
+                                    </td>
+
+                                    <td>
+                                        <span class="group-status">
+                                            {{ row.status_label }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <div class="progress-wrapper">
+
+                                            <span class="progress-text">
+                                                {{ row.progress }}%
+                                            </span>
+
+                                            <div class="progress-bar">
+
+                                                <div
+                                                    class="progress-fill blue"
+                                                    style="width: {{ row.progress }}%;"
+                                                ></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+                                        <a
+                                            href="{% url 'group_details' %}"
+                                            class="btn-view"
+                                            style="text-decoration: none;"
+                                        >
+
+                                            <svg viewBox="0 0 24 24"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="2"
+                                                 width="14"
+                                                 height="14">
+
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                <circle cx="12" cy="12" r="3"/>
+                                            </svg>
+
+                                            View Details
+
+                                        </a>
+                                    </td>
+
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="7">
+
+                                        <div class="database-empty">
+
+                                            <strong>No assigned groups found.</strong>
+
+                                            {% if search_query or selected_status %}
+                                                Try changing your search or filter.
+                                            {% else %}
+                                                Groups assigned to your account will appear here.
+                                            {% endif %}
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- TABLE FOOTER -->
+                <div class="pagination-container">
+
+                    <span class="pagination-text">
+                        Showing {{ assigned_group_rows|length }} group{{ assigned_group_rows|length|pluralize }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- SIDEBAR MENU SCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('active');
+        });
+    }
+
+});
+</script>
+
+</body>
+</html>
